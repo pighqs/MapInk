@@ -11,6 +11,7 @@ const { Search } = Input;
 const { RangePicker } = DatePicker;
 
 
+
 moment.locale("fr");
 
 
@@ -99,6 +100,7 @@ class SearchForm extends React.Component {
           <Search
             placeholder="where ?"
             onSearch={value => this.handleSearch(value)}
+             className="search-ipt"
           />
           {redirect}
         </Col>

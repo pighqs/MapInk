@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from 'react-router-dom'
 import { connect } from "react-redux";
 
+
+
 // antd
 import "antd/dist/antd.css";
 import { Menu, Icon } from "antd";
@@ -53,7 +55,8 @@ class Navbar extends React.Component {
       logItem = <Menu.Item key="registerlogin"><Icon type="login" /><Link className="link" to="/registerlogin">Artist Access</Link></Menu.Item>
       SessionsItem = <Menu.Item disabled key="guestsessions"><Icon type="calendar" /><Link className="link" to="/guestsessions">your sessions as guest</Link></Menu.Item>
     }
-    
+
+
     return (
       
       <Menu

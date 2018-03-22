@@ -79,7 +79,7 @@ h3.white {
 }
 
 .roundBTN {
-  border-radius: 20px !important;
+  border-radius: 20px;
   margin: 0 auto;
 }
 
@@ -94,7 +94,7 @@ h3.white {
 .ant-input,
 .ant-input-search-button {
   border-radius: 50px !important;
-  height: 50px !important;
+  height: 50px;
   font-family: lato;
   font-style: italic;
   font-size: 1rem;
