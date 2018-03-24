@@ -61,7 +61,7 @@ class Login extends React.Component {
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 }
+        sm: { span: 18 }
       }
     };
     const tailFormItemLayout = {
@@ -71,7 +71,7 @@ class Login extends React.Component {
           offset: 0
         },
         sm: {
-          span: 16,
+          span: 18,
           offset: 8
         }
       }
