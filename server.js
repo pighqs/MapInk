@@ -130,7 +130,6 @@ app.post("/register", function(req, res) {
           });
         });
       } else {
-        console.log("mailfound, id : ", mailFound._id);
         res.json({
           testRegister: false,
           errRegister: "this mail or name is already take"
@@ -188,7 +187,6 @@ app.get("/mysessions", function(req, res) {
 });
 
 app.post("/mysessions", function(req, res, next) {
-  console.log(req.fields.artistID);
   let sessionsList = []; 
   var query = sessionModel.find({ artistID: req.fields.artistID });
   query.exec(function(error, sessions) {

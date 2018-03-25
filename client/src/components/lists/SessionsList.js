@@ -18,9 +18,9 @@ class SessionsList extends React.Component {
   }
 
   componentWillMount() {
-    //console.log("componentWillMount, artist Logged :", this.props.artistID);
     let mySessionsData = new FormData();
-    mySessionsData.append("artistID", this.props.artistID);
+    mySessionsData.append("artistID", sessionStorage.getItem("id artist logged"));
+
 
     fetch("/mysessions", {
       method: "POST",
@@ -28,7 +28,6 @@ class SessionsList extends React.Component {
     })
       .then(response => response.json())
       .then((answerMySessions) => {
-        //console.log("liste sessions from back:", answerMySessions.sessionsList)
         this.setState({
           sessionsListFromBack: answerMySessions.sessionsList
         });
@@ -39,11 +38,9 @@ class SessionsList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(
-      "nextProps newSession",nextProps.newSession
-    );
+    let sessionsFromBackPlusNew = this.state.sessionsListFromBack.concat(nextProps.newSession)
     this.setState({
-      sessionsSinceLog: nextProps.newSession
+      sessionsListFromBack: sessionsFromBackPlusNew
     });
   }
 
@@ -86,7 +83,7 @@ const mapStateToProps = state => {
   // state.sendCityCoords reçu via sendCityCoords.reducer devient props.newCity
   return {
     artistID: state.sendLoggedArtist,
-    newSession: state.newSession
+    newSession: state.sendNewSession
   };
 };
 

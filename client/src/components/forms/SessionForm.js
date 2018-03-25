@@ -128,8 +128,6 @@ class SessionForm extends React.Component {
           })
             .then(response => response.json())
             .then(answerSessionSave => {
-              console.log("sessionSaved", answerSessionSave.sessionSaved);
-              console.log("errSession", answerSessionSave.errSession);
               if (answerSessionSave.sessionSaved) {
                 this.props.sendNewSession(answerSessionSave.sessionSaved);
                 message.success("your new spot has been saved");
@@ -214,10 +212,7 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch({ type: "NEW_CITY_COORDS", cityCoords: value });
     },
     sendNewSession: function(value) {
-      dispatch({
-        type: "NEW_SESSION",
-        newSession: value
-      });
+      dispatch({ type: "NEW_SESSION", newSession: value });
     }
   };
 };

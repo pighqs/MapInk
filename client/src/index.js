@@ -15,7 +15,10 @@ import { createStore, combineReducers } from 'redux';
 // reducers 
 import sendCityCoords from './reducers/sendCityCoords.reducer';
 import sendLoggedArtist from './reducers/sendLoggedArtist.reducer';
-const reducer = combineReducers({ sendCityCoords, sendLoggedArtist });
+import sendNewSession from './reducers/sendNewSession.reducer';
+import sendActiveLink from './reducers/sendActiveLink.reducer';
+
+const reducer = combineReducers({ sendCityCoords, sendLoggedArtist, sendNewSession, sendActiveLink });
 
 const store = createStore(
     reducer, /* preloadedState, */

@@ -22,27 +22,21 @@ class Map extends React.Component {
     };
   }
   
-  componentWillMount() {
-    var options = {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
-    };
-    
-    function success(pos) {
-      var crd = pos.coords;
-    
-      console.log('Votre position actuelle est :');
-      console.log(`Latitude : ${crd.latitude}`);
-      console.log(`Longitude: ${crd.longitude}`);
-      console.log(`Plus ou moins ${crd.accuracy} mètres.`);
-    };
-    
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    };
-    
-    navigator.geolocation.getCurrentPosition(success, error, options);
+  componentDidMount() {
+    if(this.state.center.lat == null) {
+      navigator.geolocation.getCurrentPosition(position => {
+        console.log("position",position)
+        this.setState({
+          center: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+        });
+        sessionStorage.setItem("user position", this.state.center);
+      });
+    } else {
+      console.log("deja des coordonnes")
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,7 +58,6 @@ class Map extends React.Component {
   }
 
   render() {
-    console.log("this.state.center", this.state.center)
     const MapWithAMarker = withScriptjs(
       withGoogleMap(props => (
         <GoogleMap defaultZoom={12} defaultCenter={this.state.center}>
