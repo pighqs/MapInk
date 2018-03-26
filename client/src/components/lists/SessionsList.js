@@ -49,14 +49,11 @@ class SessionsList extends React.Component {
   }
 
   handleDelete(id, artistID) {
-    console.log(artistID)
     fetch(`deleteguestsession/${id}/${artistID}`, {
       method: "DELETE"
     })
       .then(response => response.json())
       .then(result => {
-        console.log("session erased from db", result);
-        // this.props.sendDelSession(id);
         this.setState({
           sessionsListFromBack: result.sessionsList
         });
