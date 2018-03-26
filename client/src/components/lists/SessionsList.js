@@ -1,9 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import SessionItem from "./SessionItem";
+import { Table, Icon, Divider, Popconfirm } from "antd";
+
 import moment from "moment";
-//import "moment/locale/fr";
+import "moment/locale/fr";
 moment.locale("fr");
 
 class SessionsList extends React.Component {
@@ -13,6 +14,7 @@ class SessionsList extends React.Component {
       sessionsListFromBack: [],
       sessionsSinceLog: []
     };
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentWillMount() {
@@ -46,22 +48,77 @@ class SessionsList extends React.Component {
     });
   }
 
+  handleDelete(id, artistID) {
+    console.log(artistID)
+    fetch(`deleteguestsession/${id}/${artistID}`, {
+      method: "DELETE"
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log("session erased from db", result);
+        // this.props.sendDelSession(id);
+        this.setState({
+          sessionsListFromBack: result.sessionsList
+        });
+
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   render() {
+    const locale = {
+      filterConfirm: "Ok",
+      filterReset: "Reset",
+      emptyText: "No sessions registered"
+    };
+    const columns = [
+      {
+        title: "tattoo Shop",
+        dataIndex: "tattooShop",
+        key: "tattooShop"
+      },
+      {
+        title: "Start Date",
+        dataIndex: "startDate",
+        key: "startDate"
+      },
+      {
+        title: "End Date",
+        dataIndex: "endDate",
+        key: "endDate"
+      },
+      {
+        title: "Address",
+        dataIndex: "shopAddress",
+        key: "shopAddress"
+      },
+      {
+        title: "Action",
+        key: "action",
+        render: (text, record) => (
+          <span>
+            <Divider type="vertical" />
+            <Popconfirm
+              title="Sure to delete?"
+              onConfirm={() => this.handleDelete(record._id, record.artistID)}
+            >
+              <Icon className="white clickable" type="delete" />
+            </Popconfirm>
+          </span>
+        )
+      }
+    ];
+
     return (
-      <div>
-        {this.state.sessionsListFromBack.map(
-          ({ tattooShop, shopAddress, startDate, endDate }, index) => (
-            <SessionItem
-              key={index}
-              tattooShop={tattooShop}
-              shopAddress={shopAddress}
-              startDate={moment(startDate).format("LL")}
-              endDate={moment(endDate).format("LL")}
-            />
-          )
-        )}
-        <p className="white">you have no sessions registered</p>
-      </div>
+      <Table
+        columns={columns}
+        rowKey={record => record._id}
+        dataSource={this.state.sessionsListFromBack}
+        pagination={false}
+        locale={locale}
+      />
     );
   }
 }
@@ -71,6 +128,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     sendCityCoords: value => {
       dispatch({ type: "NEW_CITY_COORDS", cityCoords: value });
+    },
+    sendDelSession: value => {
+      dispatch({ type: "SESSION_DELETED", sessionID: value });
     }
   };
 };
@@ -79,7 +139,7 @@ const mapStateToProps = state => {
   // state.sendCityCoords reçu via sendCityCoords.reducer devient props.newCity
   return {
     artistID: state.sendLoggedArtist,
-    newSession: state.sendNewSession
+    newSession: state.sendNewSession,
   };
 };
 

@@ -8,14 +8,14 @@ font-family: 'Bellefair', serif; */
 .link {
   display: inline !important;
 }
-.ant-menu-item .link, .ant-menu-item .anticon, .ant-menu-submenu-selected .link {
+.ant-menu-item .link, .ant-menu-item .anticon, .ant-menu-submenu-title {
   color: #7d88a1 !important;
 }
 
 .ant-menu-item-selected , .ant-menu-submenu-selected {
   border-bottom: 3px solid  #4834d4 !important;
 }
-.ant-menu-item-selected .link, .ant-menu-submenu-selected, .ant-menu-item-selected .anticon {
+.ant-menu-item-selected .link, .ant-menu-submenu-selected .link, .ant-menu-item-selected .anticon, .ant-menu-submenu-selected .ant-menu-submenu-title{
   color:#4834d4 !important;
 }
 .ant-menu-item-disabled .link,.ant-menu-item-disabled .anticon {
@@ -29,7 +29,6 @@ font-family: 'Bellefair', serif; */
   border-bottom: none !important;
 }
 
-.dont
 .ant-menu-item:hover .link,.ant-menu-item:hover .anticon, .ant-menu-submenu-selected:hover span, .ant-menu-submenu-selected:hover .anticon {
   color: #686de0 !important;
 }
@@ -67,10 +66,15 @@ font-family: 'Bellefair', serif; */
   border-radius: 100px;
 }
 
+.clickable {
+  cursor: pointer;
+}
+.white {
+  color: white;
+}
 h2.white {
   margin: 1rem 0 2rem 0;
   font-size: 2rem;
-  color: white;
   font-family: "Lato", "Monospaced Number";
   font-style: italic;
 }
@@ -78,14 +82,19 @@ h2.white {
 h3.white {
   margin: 1rem 0 2rem 0;
   font-size: 1.5rem;
-  color: white;
   font-family: "Lato", "Monospaced Number";
   font-style: italic;
 }
 
 .roundBTN {
   border-radius: 20px !important;
+  border: none !important;
   margin: 0 auto;
+  padding: 5px;
+}
+
+.roundBTN:hover {
+color: #4834d4 !important;
 }
 
 #registerLogin .has-error .ant-form-explain, #registerLogin .has-error .ant-form-split {

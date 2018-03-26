@@ -2,9 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 // antd 
-import {
-  Form, Input, Icon, Button, Alert, message
-} from "antd";
+import { Form, Input, Icon, Button, Col, message } from "antd";
 const FormItem = Form.Item;
 
 
@@ -112,17 +110,6 @@ class Register extends React.Component {
       }
     };
 
-
-    let errorMessage;
-    if (this.state.registerMessage) {
-      errorMessage = (
-        <Alert
-          className="alertMessage ant-col-xs-24 ant-col-sm-16"
-          message={this.state.registerMessage}
-          type="error"
-        />
-      );
-    }
 
     return (
       <div>
@@ -232,7 +219,7 @@ class Register extends React.Component {
             </Button>
           </FormItem>
         </Form>
-        {errorMessage}
+        {this.state.logMessage && (<Col span={18} align='middle'><p className="white">{this.state.logMessage}</p></Col>)}
       </div>
     );
   }

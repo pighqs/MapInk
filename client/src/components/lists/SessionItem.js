@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Icon } from 'antd';
 
 
 class SessionItem extends React.Component {

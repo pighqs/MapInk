@@ -188,7 +188,7 @@ app.get("/mysessions", function(req, res) {
 
 app.post("/mysessions", function(req, res, next) {
   let sessionsList = []; 
-  var query = sessionModel.find({ artistID: req.fields.artistID });
+  const query = sessionModel.find({ artistID: req.fields.artistID });
   query.exec(function(error, sessions) {
     if (sessions) {
           res.json({sessionsList: sessions})
@@ -232,3 +232,35 @@ app.post("/addguestsession", function(req, res) {
     }
   });
 });
+
+app.delete("/deleteguestsession/:id/:artistID", function(req,res){
+  console.log(req.session.artistID )
+ const query = sessionModel.remove({ _id: req.params.id })
+ query.exec(function(error, sessionDeleted) {
+  if (sessionDeleted) {
+    const query = sessionModel.find({ artistID: req.params.artistID  });
+    query.exec(function(error, sessionsAfterDelete) {
+      if (sessionsAfterDelete) {
+            res.json({sessionsList: sessionsAfterDelete})
+            } else {
+              res.json({
+                sessionsList: false,
+              });
+            }
+          })
+          .catch(function(error) {
+            console.log("mysession failed:", error);
+            res.json({ sessionsList: error });
+          });
+        } else {
+          res.json({
+            sessionsList: false,
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log("delete session failed:", error);
+        res.json({ sessionsDeleted: error });
+      });
+});
+

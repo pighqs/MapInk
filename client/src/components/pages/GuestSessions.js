@@ -22,25 +22,6 @@ class GuestSessions extends React.Component {
     };
   }
 
-  // componentDidMount() {
-  //     if(this.state.center.lat == null) {
-  //       navigator.geolocation.getCurrentPosition(position => {
-  //         console.log("pas coordonnes, geoloc")
-  //         console.log("position",position)
-  //         console.log("position.coords.latitude",position.coords.latitude)
-  //         this.setState({
-  //           center: {
-  //             lat: position.coords.latitude,
-  //             lng: position.coords.longitude
-  //           }
-  //         });
-  //         this.props.sendCityCoords(this.state.center);
-  //         sessionStorage.setItem("user position", this.state.center);
-  //       });
-  //     } else {
-  //       console.log("deja des coordonnes")
-  //     }
-  //   }
 
 
   
@@ -60,7 +41,6 @@ class GuestSessions extends React.Component {
             <h2 className="white">Welcome, {artistName}!</h2>
             <h3 className="white">add a new guest spot :</h3>
             <SessionForm />
-            <h3 className="white">your guest spots registered :</h3>
             <SessionsList />
           </Col>
           <Col span={10} align="middle">

@@ -53,9 +53,9 @@ class Navbar extends React.Component {
       logOutItem = <Menu.Item key="logout"><Icon type="logout" /> logout </Menu.Item>
       SessionsItem = <Menu.Item key="guestsessions"><Icon type="calendar" /><Link className="link" to="/guestsessions">your sessions as guest</Link></Menu.Item>
     } else {
-      logItem = <SubMenu title={<span><Icon type="login" />Artist Access</span>} className="link">
-      <Menu.Item className="submenu-link" key="login" ><Link to="/login">Login</Link></Menu.Item>
-      <Menu.Item className="submenu-link" key="register" ><Link to="/register">register</Link></Menu.Item>
+      logItem = <SubMenu className="link" title={<span><Icon type="login" />Artist Access</span>} >
+      <Menu.Item className="submenu-link" key="register" ><Link className="link" to="/register">register</Link></Menu.Item>
+      <Menu.Item className="submenu-link" key="login" ><Link className="link" to="/login">Login</Link></Menu.Item>
     </SubMenu >
       // <Menu.Item key="registerlogin"><Icon type="login" /><Link className="link" to="/registerlogin">Artist Access</Link></Menu.Item>
       SessionsItem = <Menu.Item disabled key="guestsessions"><Icon type="calendar" /><Link className="link" to="/guestsessions">your sessions as guest</Link></Menu.Item>

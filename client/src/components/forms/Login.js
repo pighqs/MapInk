@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 // antd 
-import { Form, Icon, Input, Button, Alert } from "antd";
+import { Col, Form, Icon, Input, Button } from "antd";
 const FormItem = Form.Item;
 
 class Login extends React.Component {
@@ -76,17 +76,7 @@ class Login extends React.Component {
       }
     };
 
-    let errorMessage;
-    if (this.state.logMessage) {
-      errorMessage = (
-        <Alert
-          className="alertMessage ant-col-xs-24 ant-col-sm-16"
-          message={this.state.logMessage}
-          type="error"
-        />
-      );
-    }
-
+   
     return (
       <div ref="loginForm">
         <Form onSubmit={this.handleSubmit} className="login-form">
@@ -135,7 +125,7 @@ class Login extends React.Component {
             </Button>
           </FormItem>
         </Form>
-        {errorMessage}
+        {this.state.logMessage && (<Col span={18} align='middle'><p className="white">{this.state.logMessage}</p></Col>)}
       </div>
     );
   }
