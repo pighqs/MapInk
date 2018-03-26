@@ -4,7 +4,6 @@ import SearchForm from "../forms/SearchForm";
 import React from "react";
 
 // antd
-import "antd/dist/antd.css";
 import { Layout, Row, Col } from "antd";
 
 

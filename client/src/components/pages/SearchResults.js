@@ -5,7 +5,6 @@ import Navbar from '../header/Navbar'
 import React from "react";
 
 // antd
-import "antd/dist/antd.css";
 import { Layout } from "antd";
 import { Row, Col } from "antd";
 

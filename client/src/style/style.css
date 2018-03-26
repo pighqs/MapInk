@@ -62,10 +62,13 @@ font-family: 'Bellefair', serif; */
   border-radius: 100px;
 }
 
+.white {
+  color: white;
+}
+
 h2.white {
   margin: 1rem 0 2rem 0;
   font-size: 2rem;
-  color: white;
   font-family: "Lato", "Monospaced Number";
   font-style: italic;
 }
@@ -73,7 +76,6 @@ h2.white {
 h3.white {
   margin: 1rem 0 2rem 0;
   font-size: 1.5rem;
-  color: white;
   font-family: "Lato", "Monospaced Number";
   font-style: italic;
 }

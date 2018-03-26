@@ -2,8 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import "antd/dist/antd.css";
-
 import RegisterForm from "../forms/Register";
 import LoginFormRedux from "../forms/Login";
 import Navbar from "../header/Navbar";

@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
+
+// antd
+import "antd/dist/antd.css";
+
 // initialisation Router
 import { BrowserRouter } from 'react-router-dom';
 import RoutesList from './components/routesList';

@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-// antd
-import "antd/dist/antd.css";
+// antd 
 import { Form, Icon, Input, Button, Alert } from "antd";
 const FormItem = Form.Item;
 

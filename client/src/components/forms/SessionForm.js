@@ -5,7 +5,6 @@ import moment from "moment";
 import "moment/locale/fr";
 
 // antd
-import "antd/dist/antd.css";
 import { DatePicker, Button, Icon, Input, Row, Col, Alert, message } from "antd";
 const { RangePicker } = DatePicker;
 

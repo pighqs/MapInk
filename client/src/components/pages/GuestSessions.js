@@ -3,8 +3,7 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 // antd
-import "antd/dist/antd.css";
-import { Layout, Row, Col } from "antd";
+ import { Layout, Row, Col } from "antd";
 
 import SessionForm from "../forms/SessionForm";
 import SessionsList from "../lists/SessionsList";

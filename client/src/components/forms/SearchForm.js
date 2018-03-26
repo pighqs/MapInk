@@ -4,8 +4,7 @@ import { Redirect } from "react-router-dom";
 
 import moment from "moment";
 import "moment/locale/fr";
-// antd
-import "antd/dist/antd.css";
+// antd 
 import { DatePicker, Input, Row, Col } from "antd";
 const { Search } = Input;
 const { RangePicker } = DatePicker;

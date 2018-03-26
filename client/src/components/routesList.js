@@ -19,7 +19,8 @@ class RoutesList extends React.Component {
       <div>
         <Route exact path="/" component={Home} />
         <Route path="/searchresults" component={SearchResults} />
-        <Route path="/registerlogin" component={RegisterLoginRedux} />
+        <Route path="/register" component={RegisterLoginRedux} />
+        <Route path="/login" component={RegisterLoginRedux} />
         <Route path="/guestsessions" component={GuestSessions} />
         {/* <Route path="*" component={NoMatch} />     */}
       </div>

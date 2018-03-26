@@ -4,9 +4,10 @@ import { connect } from "react-redux";
 
 
 
-// antd
-import "antd/dist/antd.css";
+// antd 
 import { Menu, Icon } from "antd";
+const SubMenu = Menu.SubMenu;
+
 
 
 class Navbar extends React.Component {
@@ -42,7 +43,7 @@ class Navbar extends React.Component {
 
   render() {
     let href=window.location.href.split('/')
-// renvoie array ou la 4e position est l'adresse
+    // renvoie array ou la 4e position est l'adresse
     href=href[3];
     if (href.length === 0) {
       href ="home"
@@ -52,7 +53,11 @@ class Navbar extends React.Component {
       logOutItem = <Menu.Item key="logout"><Icon type="logout" /> logout </Menu.Item>
       SessionsItem = <Menu.Item key="guestsessions"><Icon type="calendar" /><Link className="link" to="/guestsessions">your sessions as guest</Link></Menu.Item>
     } else {
-      logItem = <Menu.Item key="registerlogin"><Icon type="login" /><Link className="link" to="/registerlogin">Artist Access</Link></Menu.Item>
+      logItem = <SubMenu title={<span><Icon type="login" />Artist Access</span>} className="link">
+      <Menu.Item className="submenu-link" key="login" ><Link to="/login">Login</Link></Menu.Item>
+      <Menu.Item className="submenu-link" key="register" ><Link to="/register">register</Link></Menu.Item>
+    </SubMenu >
+      // <Menu.Item key="registerlogin"><Icon type="login" /><Link className="link" to="/registerlogin">Artist Access</Link></Menu.Item>
       SessionsItem = <Menu.Item disabled key="guestsessions"><Icon type="calendar" /><Link className="link" to="/guestsessions">your sessions as guest</Link></Menu.Item>
     }
 

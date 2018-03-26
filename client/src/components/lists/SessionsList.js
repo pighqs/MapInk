@@ -2,11 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 
 import SessionItem from "./SessionItem";
-
 import moment from "moment";
 //import "moment/locale/fr";
-//moment.locale("fr");
-
+moment.locale("fr");
 
 class SessionsList extends React.Component {
   constructor() {
@@ -14,20 +12,22 @@ class SessionsList extends React.Component {
     this.state = {
       sessionsListFromBack: [],
       sessionsSinceLog: []
-    };   
+    };
   }
 
   componentWillMount() {
     let mySessionsData = new FormData();
-    mySessionsData.append("artistID", sessionStorage.getItem("id artist logged"));
-
+    mySessionsData.append(
+      "artistID",
+      sessionStorage.getItem("id artist logged")
+    );
 
     fetch("/mysessions", {
       method: "POST",
       body: mySessionsData
     })
       .then(response => response.json())
-      .then((answerMySessions) => {
+      .then(answerMySessions => {
         this.setState({
           sessionsListFromBack: answerMySessions.sessionsList
         });
@@ -38,34 +38,30 @@ class SessionsList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let sessionsFromBackPlusNew = this.state.sessionsListFromBack.concat(nextProps.newSession)
+    let sessionsFromBackPlusNew = this.state.sessionsListFromBack.concat(
+      nextProps.newSession
+    );
     this.setState({
       sessionsListFromBack: sessionsFromBackPlusNew
     });
   }
 
   render() {
-    let sessionsList = [];
-    if (this.state.sessionsListFromBack.length > 0) {
-      sessionsList = this.state.sessionsListFromBack.map((session, index) => {
-        return <SessionItem 
-                key={index}
-                tattooShop = {session.tattooShop}
-                shopAddress = {session.shopAddress}
-                startDate = {moment(session.startDate).format('LL')}
-                endDate = {moment(session.endDate).format('LL')}
-              />;
-    });
-  } else {
-    console.log("tableau vide");
-  }
-   
-      
-    
     return (
-      <ul>
-        {sessionsList}
-      </ul>
+      <div>
+        {this.state.sessionsListFromBack.map(
+          ({ tattooShop, shopAddress, startDate, endDate }, index) => (
+            <SessionItem
+              key={index}
+              tattooShop={tattooShop}
+              shopAddress={shopAddress}
+              startDate={moment(startDate).format("LL")}
+              endDate={moment(endDate).format("LL")}
+            />
+          )
+        )}
+        <p className="white">you have no sessions registered</p>
+      </div>
     );
   }
 }

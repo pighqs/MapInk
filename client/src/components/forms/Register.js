@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-// antd
-import "antd/dist/antd.css";
+
+// antd 
 import {
   Form, Input, Icon, Button, Alert, message
 } from "antd";
