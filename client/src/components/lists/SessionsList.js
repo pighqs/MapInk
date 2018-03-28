@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
-import { Table, Icon, Divider, Popconfirm } from "antd";
+import { Row, Col, Table, Icon, Popconfirm } from "antd";
 
 import moment from "moment";
 import "moment/locale/fr";
@@ -65,6 +66,9 @@ class SessionsList extends React.Component {
   }
 
   render() {
+    const StyledIcon = styled(Icon)`
+    cursor: pointer;
+    `
     const locale = {
       filterConfirm: "Ok",
       filterReset: "Reset",
@@ -74,48 +78,71 @@ class SessionsList extends React.Component {
       {
         title: "tattoo Shop",
         dataIndex: "tattooShop",
-        key: "tattooShop"
+        key: "tattooShop",
+        width: '25%',
+        sorter: (a, b) => {if(a.tattooShop < b.tattooShop) return -1;
+        if(a.tattooShop > b.tattooShop) return 1;
+        return 0}
       },
       {
         title: "Start Date",
         dataIndex: "startDate",
-        key: "startDate"
+        key: "startDate",
+        width: '13%',
+        defaultSortOrder: 'ascend',
+        render: (text, record) => (
+          <span>{moment(record.startDate).format('LL')}</span>
+        ),
+        sorter: (a, b) => {if(a.startDate < b.startDate) return -1;
+          if(a.startDate > b.startDate) return 1;
+          return 0}
       },
       {
         title: "End Date",
         dataIndex: "endDate",
-        key: "endDate"
+        key: "endDate",
+        width: '13%',
+        render: (text, record) => (
+          <span>{moment(record.endDate).format('LL')}</span>
+        ),
+        sorter: (a, b) => {if(a.startDate < b.startDate) return -1;
+          if(a.startDate > b.startDate) return 1;
+          return 0}
       },
       {
         title: "Address",
         dataIndex: "shopAddress",
-        key: "shopAddress"
+        key: "shopAddress",
+        width: '44%',
+
       },
       {
-        title: "Action",
-        key: "action",
+        width: '5%',
         render: (text, record) => (
-          <span>
-            <Divider type="vertical" />
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => this.handleDelete(record._id, record.artistID)}
             >
-              <Icon className="white clickable" type="delete" />
+              <StyledIcon type="delete" />
             </Popconfirm>
-          </span>
         )
       }
     ];
 
     return (
+      <Row type="flex" justify="center">
+      <Col xs={24} md={22}>      
       <Table
+        className='sessionTableList'
         columns={columns}
         rowKey={record => record._id}
         dataSource={this.state.sessionsListFromBack}
         pagination={false}
         locale={locale}
+        rowClassName='session-row'
       />
+      </Col>
+      </Row>
     );
   }
 }

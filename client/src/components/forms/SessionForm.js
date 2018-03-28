@@ -1,16 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
 import moment from "moment";
 import "moment/locale/fr";
 
 // antd
-import { DatePicker, Button, Icon, Input, Row, Col, Alert, message } from "antd";
+import { DatePicker, Button, Icon, Input, Alert, message } from "antd";
 const { RangePicker } = DatePicker;
-
-moment.locale("fr");
-
-
 
 class SessionForm extends React.Component {
   constructor(props) {
@@ -31,8 +28,8 @@ class SessionForm extends React.Component {
     this.disabledDate = this.disabledDate.bind(this);
     this.handleDate = this.handleDate.bind(this);
     this.handleShopName = this.handleShopName.bind(this);
-    this.handleNewSpot = this.handleNewSpot.bind(this);
     this.handleAddressName = this.handleAddressName.bind(this);
+    this.handleNewSpot = this.handleNewSpot.bind(this);
   }
 
   disabledDate(current) {
@@ -43,6 +40,7 @@ class SessionForm extends React.Component {
   handleDate(date) {
     let startDate = moment(date[0]);
     let endDate = moment(date[1]);
+    console.log("startDate", startDate);
     console.log(startDate.isBetween("2018-02-01", "2018-02-25"));
     console.log(endDate.isBetween("2018-02-01", "2018-02-25"));
     this.setState({
@@ -144,62 +142,84 @@ class SessionForm extends React.Component {
         errorMessage: "all the fields must be completed"
       });
     }
-
-    ///
   }
 
   render() {
-    let alertMessage;
-    if (this.state.errorMessage) {
-      alertMessage = (
-        <Alert
-          className="alertMessage ant-col-xs-24 ant-col-sm-16"
-          message={this.state.errorMessage}
-          type="error"
-        />
-      );
-    }
+    const StyledAlert = styled(Alert)`
+      text-align: center;
+      color: red;
+      width: 250px;
+      border-radius: 20px;
+      margin-top: 8px;
+    `;
+
+    const RoundButton = styled(Button)`
+      border-radius: 20px
+      border: none;
+      margin: 0 auto;
+      padding: 10px 25px;
+      line-height: 0;
+      &:hover {
+        color: #4f4db3
+      }
+    `;
+
+    const styles = {
+      formsContainer: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        height: "200px"
+      },
+      icon: {
+        color: "#606c88"
+      },
+      // je dois garder styles dans css .ant-input
+      // input: {
+      //   borderRadius: "50px !important",
+      //   height: "50px !important",
+      //   fontFamily: "lato",
+      //   fontStyle: "italic",
+      //   fontSize: "1rem",
+      //   textAlign: "center"
+      // }
+    };
 
     return (
-      <div>
-        <Row type="flex" justify="center">
-          <RangePicker
-            disabledDate={this.disabledDate}
-            size="large"
-            placeholder={["from", "to"]}
-            onChange={this.handleDate}
-            format="DD-MM-YYYY"
-            allowClear={true}
-            showToday={true}
-            ranges={{
-              Today: [moment(), moment()],
-              "This Week": [moment(), moment().endOf("week")]
-            }}
-            className="cal customInput"
+      <div style={styles.formsContainer}>
+        <RangePicker
+          disabledDate={this.disabledDate}
+          size="large"
+          placeholder={["from", "to"]}
+          onChange={this.handleDate}
+          format="DD-MM-YYYY"
+          allowClear={true}
+          showToday={true}
+          ranges={{
+            Today: [moment(), moment()],
+            "This Week": [moment(), moment().endOf("week")]
+          }}
+        />
+        <Input
+          style={styles.input}
+          placeholder="name of the tattoo shop"
+          prefix={<Icon type="shop" style={styles.icon} />}
+          onChange={this.handleShopName}
+        />
+        <Input
+          style={styles.input}
+          placeholder="where ?"
+          prefix={<Icon type="environment" style={styles.icon} />}
+          onChange={this.handleAddressName}
+        />
+        <RoundButton onClick={this.handleNewSpot}>submit </RoundButton>
+        {this.state.errorMessage && (
+          <StyledAlert
+            className="ant-col-xs-24 ant-col-sm-16"
+            message={this.state.errorMessage}
+            type="error"
           />
-        </Row>
-        <Row type="flex" justify="space-around">
-          <Col span={11}>
-            <Input
-              placeholder="name of the tattoo shop"
-              prefix={<Icon type="shop" style={{ color: "#606c88" }} />}
-              onChange={this.handleShopName}
-              className="customInput"
-            />
-          </Col>
-          <Col span={11}>
-            <Input
-              placeholder="where ?"
-              prefix={<Icon type="environment" style={{ color: "#606c88" }} />}
-              onChange={this.handleAddressName}
-              className="customInput"
-            />
-          </Col>
-        </Row>
-          <Button className="roundBTN" onClick={this.handleNewSpot}>
-            submit{" "}
-          </Button>
-          {alertMessage}
+        )}
       </div>
     );
   }

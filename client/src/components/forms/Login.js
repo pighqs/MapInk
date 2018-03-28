@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
 // antd 
 import { Col, Form, Icon, Input, Button } from "antd";
@@ -71,15 +72,33 @@ class Login extends React.Component {
         },
         sm: {
           span: 18,
-          offset: 8
+          offset: 0
         }
       }
     };
 
+    const RoundButton = styled(Button)`
+      border-radius: 20px
+      border: none;
+      margin: 0 auto;
+      padding: 10px 25px;
+      line-height: 0;
+      &:hover {
+        color: #4f4db3
+      }
+    `;
+
+    const WhiteText = styled.p`
+    color: white;
+    `;
+
+   
    
     return (
-      <div ref="loginForm">
-        <Form onSubmit={this.handleSubmit} className="login-form">
+      <div >
+        <Form 
+        layout='vertical'
+        onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout}>
             {getFieldDecorator("emailLogin", {
               rules: [
@@ -95,7 +114,7 @@ class Login extends React.Component {
             })(
               <Input
                 prefix={
-                  <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <Icon type="mail" style={{color: "rgba(0,0,0,.25)"}} />
                 }
                 placeholder="Email"
               />
@@ -109,7 +128,7 @@ class Login extends React.Component {
             })(
               <Input
                 prefix={
-                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
                 }
                 type="password"
                 placeholder="Password"
@@ -117,15 +136,14 @@ class Login extends React.Component {
             )}
           </FormItem>
           <FormItem {...tailFormItemLayout}>
-            <Button
-              className="registerLoginBTN login-form-button roundBTN"
+            <RoundButton
               htmlType="submit"
             >
               Login
-            </Button>
+            </RoundButton>
           </FormItem>
         </Form>
-        {this.state.logMessage && (<Col span={18} align='middle'><p className="white">{this.state.logMessage}</p></Col>)}
+        {this.state.logMessage && (<Col span={18} align='middle'><WhiteText>{this.state.logMessage}</WhiteText></Col>)}
       </div>
     );
   }

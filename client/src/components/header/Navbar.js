@@ -1,81 +1,194 @@
 import React from "react";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
+import RegisterForm from "../forms/Register";
+import LoginForm from "../forms/Login";
 
-
-// antd 
-import { Menu, Icon } from "antd";
+// antd
+import { Menu, Icon, Modal } from "antd";
 const SubMenu = Menu.SubMenu;
-
-
 
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+
     this.state = {
       artistID: false,
-    }
+      modalVisible: false,
+      modalToShow: ""
+    };
   }
 
-
+  // showModal = () => {
+  //   console.log('show it')
+  //   this.setState({
+  //     modalVisible: true
+  //   });
+  // };
 
   handleClick(e) {
-     if (e.key === "logout") {
-       console.log("cliqué sur logout");
-       this.props.sendLoggedArtist(false);
-       sessionStorage.clear();
-       this.setState({
-         artistID:false
-       })
-     } 
+    switch (e.key) {
+      case "logout":
+        this.props.sendLoggedArtist(false);
+        sessionStorage.clear();
+        this.setState({
+          artistID: false
+        });
+        break;
+      case "register":
+      this.setState({
+        modalVisible: true,
+        modalToShow: "register"
+      });
+        break;
+        case "login":
+        this.setState({
+          modalVisible: true,
+          modalToShow: "login"
+        });
+        break;
+      default:
+        console.log("e.key handle by another way : ", e.key);
+    }
+
+  
   }
 
+  handleCancel() {
+    this.setState({
+      modalVisible: false
+    });
+  }
+  
   componentWillReceiveProps(nextProps) {
-     //console.log(nextProps)
-     if(nextProps.sendLoggedArtist) {
+    if (nextProps.sendLoggedArtist) {
+      let isModalVisible = this.state.modalVisible;
       this.setState({
-       artistID: nextProps.sendLoggedArtist
-      })
-     }
+        artistID: nextProps.sendLoggedArtist,
+        modalVisible: !isModalVisible
+      });
+    }
   }
 
   render() {
-    let href=window.location.href.split('/')
+    let href = window.location.href.split("/");
     // renvoie array ou la 4e position est l'adresse
-    href=href[3];
+    href = href[3];
     if (href.length === 0) {
-      href ="home"
+      href = "home";
     }
+    const StyledSubMenu = styled(SubMenu)`
+      display: inline !important;
+      &:hover {
+        border-bottom: 3px solid #686de0 !important;
+      }
+    `;
+    const MenuItem = styled(Menu.Item)`
+      color: #7d88a1 !important;
+      &:hover {
+        color: #686de0 !important;
+        border-bottom: 3px solid #686de0 !important;
+      }
+    `;
+    const StyledLink = styled(Link)`
+      display: inline !important;
+      &:hover {
+        color: #686de0 !important;
+      }
+    `;
+    const StyledDropItem = styled(Menu.Item)`
+      border-bottom: none !important;
+      &:hover {
+        border-bottom: none !important;
+      }
+    `;
+    const StyledIcon = styled(Icon)`
+    color: #7d88a1 !important;
+    &:hover {
+      color: #686de0 !important;
+    }import RegisterFormRedux from '../forms/Register';
+
+    `;
+    const StyledModal = styled(Modal)`
+      top: 49px;
+    `;
+
     let logOutItem, logItem, SessionsItem;
     if (sessionStorage.getItem("id artist logged")) {
-      logOutItem = <Menu.Item key="logout"><Icon type="logout" /> logout </Menu.Item>
-      SessionsItem = <Menu.Item key="guestsessions"><Icon type="calendar" /><Link className="link" to="/guestsessions">your sessions as guest</Link></Menu.Item>
+      logOutItem = (
+        <MenuItem key="logout">
+          <StyledIcon type="logout" /> logout{" "}
+        </MenuItem>
+      );
+      SessionsItem = (
+        <MenuItem key="guestsessions">
+          <StyledIcon type="calendar" />
+          <StyledLink to="/guestsessions">your sessions as guest</StyledLink>
+        </MenuItem>
+      );
     } else {
-      logItem = <SubMenu className="link" title={<span><Icon type="login" />Artist Access</span>} >
-      <Menu.Item className="submenu-link" key="register" ><Link className="link" to="/register">register</Link></Menu.Item>
-      <Menu.Item className="submenu-link" key="login" ><Link className="link" to="/login">Login</Link></Menu.Item>
-    </SubMenu >
-      // <Menu.Item key="registerlogin"><Icon type="login" /><Link className="link" to="/registerlogin">Artist Access</Link></Menu.Item>
-      SessionsItem = <Menu.Item disabled key="guestsessions"><Icon type="calendar" /><Link className="link" to="/guestsessions">your sessions as guest</Link></Menu.Item>
+      logItem = (
+        <StyledSubMenu
+          title={
+            <span>
+              <StyledIcon type="login" />Artist Access
+            </span>
+          }
+        >
+          <StyledDropItem key="register">register</StyledDropItem>
+          <StyledDropItem key="login">Login</StyledDropItem>
+        </StyledSubMenu>
+      );
+      SessionsItem = (
+        <MenuItem disabled key="guestsessions">
+          <StyledIcon type="calendar" />
+          <StyledLink to="/guestsessions">your sessions as guest</StyledLink>
+        </MenuItem>
+      );
     }
 
+    let modalForm;
+    switch (this.state.modalToShow) {
+      case "register":
+        modalForm = <RegisterForm />;
+        break;
+      case "login":
+        modalForm = <LoginForm />;
+        break;
+      default:
+        console.log("Sorry, no modal form");
+    }
 
     return (
-      
-      <Menu
-        onClick={this.handleClick}
-        selectedKeys={[href]}
-        mode="horizontal"
-      >
-        <Menu.Item key="home">
-        <Icon type="home" /><Link className="link" to="/">Home</Link>
-        </Menu.Item>
-        {logOutItem}
-        {logItem}
-        {SessionsItem}
-      </Menu>
+      <div>
+        <Menu
+          onClick={this.handleClick}
+          selectedKeys={[href]}
+          mode="horizontal"
+        >
+          <MenuItem key="home">
+            <StyledIcon type="home" />
+            <StyledLink to="/">Home</StyledLink>
+          </MenuItem>
+          {logOutItem}
+          {logItem}
+          {SessionsItem}
+        </Menu>
+        <StyledModal
+          bodyStyle={{ background: "#4f4db3" }}
+          title="Your new Sessions infos"
+          visible={this.state.modalVisible}
+          onCancel={this.handleCancel}
+          footer={null}
+          wrapClassName="login-modal"
+        >
+          {modalForm}
+        </StyledModal>
+      </div>
     );
   }
 }
@@ -104,6 +217,5 @@ const mapStateToProps = state => {
 };
 
 const NavbarRedux = connect(mapStateToProps, mapDispatchToProps)(Navbar);
-
 
 export default NavbarRedux;

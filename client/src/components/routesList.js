@@ -8,14 +8,7 @@ import RegisterLoginRedux from './pages/RegisterLogin';
 import GuestSessions from './pages/GuestSessions';
 
 
-
-
-
-class RoutesList extends React.Component {
-
-
-  render() {
-    return (
+const RoutesList = () => (
       <div>
         <Route exact path="/" component={Home} />
         <Route path="/searchresults" component={SearchResults} />
@@ -25,7 +18,6 @@ class RoutesList extends React.Component {
         {/* <Route path="*" component={NoMatch} />     */}
       </div>
     );
-  }
-}
+
 
 export default RoutesList;

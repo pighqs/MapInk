@@ -1,16 +1,10 @@
 /* font-family: 'Lato', sans-serif;
 font-family: 'Roboto Condensed', sans-serif;
 font-family: 'Bellefair', serif; */
-.layout {
-  min-height: 100vh;
-}
 
-.link {
-  display: inline !important;
-}
-.ant-menu-item .link, .ant-menu-item .anticon, .ant-menu-submenu-title {
-  color: #7d88a1 !important;
-}
+
+
+
 
 .ant-menu-item-selected , .ant-menu-submenu-selected {
   border-bottom: 3px solid  #4834d4 !important;
@@ -22,88 +16,17 @@ font-family: 'Bellefair', serif; */
   color: rgba(0, 0, 0, 0.25) !important
 }
 
-.ant-menu-item:hover, .ant-menu-submenu:hover {
-  border-bottom: 3px solid  #686de0 !important;
-}
-.ant-menu-submenu:hover .submenu-link {
-  border-bottom: none !important;
-}
+
 
 .ant-menu-item:hover .link,.ant-menu-item:hover .anticon, .ant-menu-submenu-selected:hover span, .ant-menu-submenu-selected:hover .anticon {
   color: #686de0 !important;
 }
 
 
-
-
-#home {
-  background: url("../imgs/alex-hockett-41555_NB.jpg") no-repeat fixed top;
-  background-size: 145%;
-}
-
-#searchResults,
-#registerLogin,
-#guestsessions {
-  background: #606c88; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #4834d4 ,
-    #606c88
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #4834d4 ,
-    #606c88
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
-.mapInk {
-  font-size: 6rem;
-  letter-spacing: .5rem;
-  color: white;
-  margin: 7rem 0 0 0;
-  background: #4834d4;
-  border-radius: 100px;
-}
-
-.clickable {
-  cursor: pointer;
-}
-.white {
-  color: white;
-}
-h2.white {
-  margin: 1rem 0 2rem 0;
-  font-size: 2rem;
-  font-family: "Lato", "Monospaced Number";
-  font-style: italic;
-}
-
-h3.white {
-  margin: 1rem 0 2rem 0;
-  font-size: 1.5rem;
-  font-family: "Lato", "Monospaced Number";
-  font-style: italic;
-}
-
-.roundBTN {
-  border-radius: 20px !important;
-  border: none !important;
-  margin: 0 auto;
-  padding: 5px;
-}
-
-.roundBTN:hover {
-color: #4834d4 !important;
-}
-
-#registerLogin .has-error .ant-form-explain, #registerLogin .has-error .ant-form-split {
+.has-error .ant-form-explain, .has-error .ant-form-split {
   color:white;
 }
 
-.customInput {
-  margin-bottom: 8px;
-}
 
 .ant-input,
 .ant-input-search-button {
@@ -146,16 +69,22 @@ color: #4834d4 !important;
   vertical-align: none;
 }
 
-.alertMessage {
-  text-align: center;
-  color: red;
+
+.sessionTableList {
+  margin-top: 30px;
 }
 
-.sessionItem {
-  color:white;
-  list-style-type: none;
-}
 
 .sessionItem h3 {
   color:white;
 }
+
+.session-row {
+  background:rgba(255, 255, 255, 0.2);
+  color: white
+}
+
+.session-row:hover {
+  color:#4834d4
+}
+

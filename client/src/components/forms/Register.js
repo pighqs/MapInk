@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
 // antd 
 import { Form, Input, Icon, Button, Col, message } from "antd";
@@ -110,10 +111,23 @@ class Register extends React.Component {
       }
     };
 
+    const RoundButton = styled(Button)`
+      border-radius: 20px
+      border: none;
+      margin: 0 auto;
+      padding: 10px 25px;
+      line-height: 0;
+      &:hover {
+        color: #4f4db3
+      }
+    `;
+
+
 
     return (
       <div>
-        <Form onSubmit={this.handleSubmit}>
+        <Form layout='vertical'
+        onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout}>
             {getFieldDecorator("email", {
               rules: [
@@ -129,7 +143,7 @@ class Register extends React.Component {
             })(
               <Input
                 prefix={
-                  <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <Icon type="mail" style={{color: "rgba(0,0,0,.25)"}} />
                 }
                 placeholder="Email"
               />
@@ -149,7 +163,7 @@ class Register extends React.Component {
             })(
               <Input
                 prefix={
-                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
                 }
                 type="password"
                 placeholder="Password"
@@ -170,7 +184,7 @@ class Register extends React.Component {
             })(
               <Input
                 prefix={
-                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
                 }
                 type="password"
                 placeholder="Confirm Password"
@@ -191,7 +205,7 @@ class Register extends React.Component {
             })(
               <Input
                 prefix={
-                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <Icon type="user" style={{color: "rgba(0,0,0,.25)"}} />
                 }
                 type="name"
                 placeholder="Your name as a Tatto Artist"
@@ -205,7 +219,7 @@ class Register extends React.Component {
             })(
               <Input
                 prefix={
-                  <Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <Icon type="global" style={{color: "rgba(0,0,0,.25)"}} />
                 }
                 type="website"
                 placeholder="Website"
@@ -214,9 +228,9 @@ class Register extends React.Component {
           </FormItem>
 
           <FormItem {...tailFormItemLayout}>
-            <Button className="registerLoginBTN roundBTN" htmlType="submit">
+            <RoundButton htmlType="submit">
               Register
-            </Button>
+            </RoundButton>
           </FormItem>
         </Form>
         {this.state.logMessage && (<Col span={18} align='middle'><p className="white">{this.state.logMessage}</p></Col>)}

@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import styled from "styled-components";
 
 import RegisterForm from "../forms/Register";
 import LoginFormRedux from "../forms/Login";
@@ -22,8 +23,6 @@ class RegisterLogin extends React.Component {
     };
   }
 
-  
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       logStatus: nextProps.artistID
@@ -36,12 +35,26 @@ class RegisterLogin extends React.Component {
       redirect = <Redirect to="/guestsessions" />;
     }
 
+    const StyledLayout = styled(Layout)`
+      min-height: 100vh;
+      background: #606c88;
+      background: -webkit-linear-gradient(to top, #4834d4, #606c88);
+      background: linear-gradient(to top, #4834d4, #606c88);
+    `;
+    const SubTitle = styled.h2`
+      color: white;
+      margin: 1rem 0 2rem 0;
+      font-size: 2rem;
+      font-family: "Lato", "Monospaced Number";
+      font-style: italic;
+    `;
+
     return (
-      <Layout className="layout" id="registerLogin">
+      <StyledLayout>
         <Navbar />
         {redirect}
         <Row type="flex" justify="center">
-          <h2 className="white">Register or Log here</h2>
+          <SubTitle >Register or Log here</SubTitle>
         </Row>
         <Row type="flex" justify="space-around" align="middle" gutter={4}>
           <Col span={10} offset={2}>
@@ -51,7 +64,7 @@ class RegisterLogin extends React.Component {
             <RegisterForm />
           </Col>
         </Row>
-      </Layout>
+      </StyledLayout>
     );
   }
 }
@@ -71,5 +84,7 @@ const mapStateToProps = state => {
   };
 };
 
-const RegisterLoginRedux = connect(mapStateToProps, mapDispatchToProps)(RegisterLogin);
+const RegisterLoginRedux = connect(mapStateToProps, mapDispatchToProps)(
+  RegisterLogin
+);
 export default RegisterLoginRedux;

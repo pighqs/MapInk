@@ -1,11 +1,11 @@
-import Navbar from '../header/Navbar'
-import SearchForm from "../forms/SearchForm";
-
 import React from "react";
+import styled from "styled-components";
+
+import Navbar from "../header/Navbar";
+import SearchForm from "../forms/SearchForm";
 
 // antd
 import { Layout, Row, Col } from "antd";
-
 
 class Home extends React.Component {
   constructor(props) {
@@ -21,28 +21,44 @@ class Home extends React.Component {
   }
 
   render() {
-    
+    const StyledLayout = styled(Layout)`
+      min-height: 100vh;
+      background: url("../imgs/alex-hockett-41555_NB.jpg") no-repeat fixed top;
+      background-size: 145%;
+    `;
+    const MapinkBigTitle = styled.h1`
+      font-size: 6rem;
+      letter-spacing: 0.5rem;
+      color: white;
+      margin: 7rem 0 0 0;
+      background: #4834d4;
+      border-radius: 100px;
+    `;
+    const SubTitle = styled.h2`
+      color: white;
+      margin: 1rem 0 2rem 0;
+      font-size: 2rem;
+      font-family: "Lato", "Monospaced Number";
+      font-style: italic;
+    `;
 
     return (
-      <Layout className="layout" id="home">
-      <Navbar/>
+      <StyledLayout>
+        <Navbar />
         <Row type="flex" justify="center">
           <Col span={8} align="middle">
-            <h1 className="mapInk">MAPINK</h1>
-            <h2 className="white">
-              find the best tattoo artists around you
-            </h2>
+            <MapinkBigTitle> MAPINK </MapinkBigTitle>
+            <SubTitle>find the best tattoo artists around you</SubTitle>
           </Col>
         </Row>
         <Row type="flex" justify="center">
           <Col span={10}>
-          <SearchForm />
+            <SearchForm />
           </Col>
         </Row>
-      </Layout>
+      </StyledLayout>
     );
   }
 }
-
 
 export default Home;
