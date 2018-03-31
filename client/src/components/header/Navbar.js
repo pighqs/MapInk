@@ -19,18 +19,16 @@ class Navbar extends React.Component {
     this.state = {
       artistID: false,
       modalVisible: false,
-      modalToShow: ""
+      linkClicked: ""
     };
   }
 
-  // showModal = () => {
-  //   console.log('show it')
-  //   this.setState({
-  //     modalVisible: true
-  //   });
-  // };
-
   handleClick(e) {
+    sessionStorage.removeItem('search address');
+    sessionStorage.removeItem('start date');
+    sessionStorage.removeItem('end date');
+    sessionStorage.removeItem("user position name");
+ 
     switch (e.key) {
       case "logout":
         this.props.sendLoggedArtist(false);
@@ -40,36 +38,34 @@ class Navbar extends React.Component {
         });
         break;
       case "register":
-      this.setState({
-        modalVisible: true,
-        modalToShow: "register"
-      });
-        break;
-        case "login":
         this.setState({
           modalVisible: true,
-          modalToShow: "login"
+          linkClicked: "register"
+        });
+        break;
+      case "login":
+        this.setState({
+          modalVisible: true,
+          linkClicked: "login"
         });
         break;
       default:
         console.log("e.key handle by another way : ", e.key);
     }
-
-  
   }
 
   handleCancel() {
     this.setState({
-      modalVisible: false
+      modalVisible: false,
+      linkClicked: ""
     });
   }
-  
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.sendLoggedArtist) {
-      let isModalVisible = this.state.modalVisible;
       this.setState({
         artistID: nextProps.sendLoggedArtist,
-        modalVisible: !isModalVisible
+        modalVisible: false
       });
     }
   }
@@ -81,78 +77,129 @@ class Navbar extends React.Component {
     if (href.length === 0) {
       href = "home";
     }
-    const StyledSubMenu = styled(SubMenu)`
-      display: inline !important;
-      &:hover {
-        border-bottom: 3px solid #686de0 !important;
+
+    const colors = {
+      grey: "#7d88a1 !important",
+      inactiveGrey: "rgba(0, 0, 0, 0.25) !important",
+      activeViolet: "#4834d4 !important",
+      hoverViolet: "#686de0 !important"
+    };
+
+    const StyledMenuWrapper = styled.div`
+      background: white !important;
+    `;
+
+    const StyledMenu = styled(Menu)`
+      .ant-menu-item > i {
+        color: ${colors.grey}
+      }
+      .ant-menu-item > a {
+        color: ${colors.grey}
+        display: inline !important;
+      }
+      .ant-menu-item {
+        color: ${colors.grey}
+        border-bottom: 3px solid ${colors.grey}
+        display: inline !important;
+
+        &:hover {
+          border-bottom: 3px solid ${colors.hoverViolet};
+          color: ${colors.hoverViolet};
+          > i {
+            color: ${colors.hoverViolet};
+          }
+          > a {
+            color: ${colors.hoverViolet};
+          }
+        }
+      }
+      .ant-menu-submenu {
+        color: ${colors.grey}
+        display: inline !important;
+        border-bottom: 3px solid ${colors.grey}
+        &:hover {
+          border-bottom: 3px solid ${colors.hoverViolet};
+          color: ${colors.hoverViolet};
+          > .ant-menu-submenu-title {
+            color: ${colors.hoverViolet};
+          }
+        }
+      }
+
+      .ant-menu-item-selected {
+        border-bottom: 3px solid ${colors.activeViolet};
+        > i {
+          color: ${colors.activeViolet};
+        }
+        > a {
+          color: ${colors.activeViolet};
+        }
+      }
+
+      .ant-menu-item-disabled {
+        border-bottom: 3px solid ${colors.inactiveGrey};
+        > i {
+          color: ${colors.inactiveGrey};
+        }
+        > a {
+          color: ${colors.inactiveGrey};
+        }
       }
     `;
-    const MenuItem = styled(Menu.Item)`
-      color: #7d88a1 !important;
-      &:hover {
-        color: #686de0 !important;
-        border-bottom: 3px solid #686de0 !important;
-      }
-    `;
-    const StyledLink = styled(Link)`
-      display: inline !important;
-      &:hover {
-        color: #686de0 !important;
-      }
-    `;
+
     const StyledDropItem = styled(Menu.Item)`
+      color: ${colors.grey}
       border-bottom: none !important;
       &:hover {
+        color: ${colors.hoverViolet};
         border-bottom: none !important;
       }
     `;
-    const StyledIcon = styled(Icon)`
-    color: #7d88a1 !important;
-    &:hover {
-      color: #686de0 !important;
-    }import RegisterFormRedux from '../forms/Register';
 
-    `;
     const StyledModal = styled(Modal)`
+      position: absolute;
       top: 49px;
+      left: 0px;
+      font-family: "Lato", sans-serif;
+      > div {
+        width: 400px;
+      }
+      .ant-modal-header {
+        text-align: center;
+        .ant-modal-title {
+          letter-spacing: 0.1em;
+          color: ${colors.activeViolet};
+        }
+      }
     `;
 
-    let logOutItem, logItem, SessionsItem;
+    let logOutItem, logItem, sessionsIsDisabled;
     if (sessionStorage.getItem("id artist logged")) {
       logOutItem = (
-        <MenuItem key="logout">
-          <StyledIcon type="logout" /> logout{" "}
-        </MenuItem>
+        <Menu.Item key="logout">
+          <Icon type="logout" /> logout
+        </Menu.Item>
       );
-      SessionsItem = (
-        <MenuItem key="guestsessions">
-          <StyledIcon type="calendar" />
-          <StyledLink to="/guestsessions">your sessions as guest</StyledLink>
-        </MenuItem>
-      );
+      sessionsIsDisabled = false;
     } else {
       logItem = (
-        <StyledSubMenu
+        <SubMenu
           title={
             <span>
-              <StyledIcon type="login" />Artist Access
+              <Icon type="login" />Artist Access
             </span>
           }
         >
           <StyledDropItem key="register">register</StyledDropItem>
           <StyledDropItem key="login">Login</StyledDropItem>
-        </StyledSubMenu>
+        </SubMenu>
       );
-      SessionsItem = (
-        <MenuItem disabled key="guestsessions">
-          <StyledIcon type="calendar" />
-          <StyledLink to="/guestsessions">your sessions as guest</StyledLink>
-        </MenuItem>
-      );
+      sessionsIsDisabled = true;
     }
 
+    // afficher formulaire correspondant au lien cliqué ds modal:
     let modalForm;
-    switch (this.state.modalToShow) {
+    switch (this.state.linkClicked) {
       case "register":
         modalForm = <RegisterForm />;
         break;
@@ -160,27 +207,30 @@ class Navbar extends React.Component {
         modalForm = <LoginForm />;
         break;
       default:
-        console.log("Sorry, no modal form");
+        modalForm = null;
     }
 
     return (
-      <div>
-        <Menu
+      <StyledMenuWrapper>
+        <StyledMenu
           onClick={this.handleClick}
           selectedKeys={[href]}
           mode="horizontal"
         >
-          <MenuItem key="home">
-            <StyledIcon type="home" />
-            <StyledLink to="/">Home</StyledLink>
-          </MenuItem>
+          <Menu.Item key="home">
+            <Icon type="home" />
+            <Link to="/">Home</Link>
+          </Menu.Item>
           {logOutItem}
           {logItem}
-          {SessionsItem}
-        </Menu>
+          <Menu.Item disabled={sessionsIsDisabled} key="guestsessions">
+            <Icon type="calendar" />
+            <Link to="/guestsessions">your guest spots</Link>
+          </Menu.Item>
+        </StyledMenu>
         <StyledModal
           bodyStyle={{ background: "#4f4db3" }}
-          title="Your new Sessions infos"
+          title={this.state.linkClicked.toUpperCase()}
           visible={this.state.modalVisible}
           onCancel={this.handleCancel}
           footer={null}
@@ -188,7 +238,7 @@ class Navbar extends React.Component {
         >
           {modalForm}
         </StyledModal>
-      </div>
+      </StyledMenuWrapper>
     );
   }
 }

@@ -58,9 +58,11 @@ const tattooArtistSchema = mongoose.Schema({
 });
 
 const sessionSchema = mongoose.Schema({
+  artistName: String,
   artistID: String,
   tattooShop: String,
   shopAddress: String,
+  shopCountry: String,
   shopCoords: {
     lat: String,
     lng: String
@@ -181,27 +183,83 @@ app.get("/logout", function(req, res) {
   res.json(testLogin);
 });
 
+app.get("/gettattooers", function(req, res) {
+  res.render("index");
+});
+
+app.post("/gettattooers", function(req, res) {
+  let tattooersList = [];
+  const query = sessionModel.find({
+    shopCountry: req.fields.searchPlace_country
+  });
+  query
+    .exec(function(error, tattooersSpots) {
+      if (tattooersSpots) {
+        const searchLat = req.fields.searchPlace_lat;
+        const searchLng = req.fields.searchPlace_lng;
+        tattooersSpots.forEach((tattooerSpot, index) => {
+          let spotLat = tattooerSpot.shopCoords.lat;
+          let spotLng = tattooerSpot.shopCoords.lng;
+          const distance = (lat1, lon1, lat2, lon2, unit) => {
+            const radlat1 = Math.PI * lat1 / 180;
+            const radlat2 = Math.PI * lat2 / 180;
+            const theta = lon1 - lon2;
+            const radtheta = Math.PI * theta / 180;
+            let dist =
+              Math.sin(radlat1) * Math.sin(radlat2) +
+              Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+            dist = Math.acos(dist);
+            dist = dist * 180 / Math.PI;
+            dist = dist * 60 * 1.1515;
+            if (unit == "K") {
+              dist = dist * 1.609344;
+            }
+            if (unit == "N") {
+              dist = dist * 0.8684;
+            }
+            return "distance", dist;
+          };
+          if (distance(searchLat, searchLng, spotLat, spotLng, "K") < 80) {
+            tattooersList.push(tattooerSpot);
+          } else {
+            console.log("too far");
+          }
+        });
+
+        res.json({ tattooersList });
+      } else {
+        res.json({
+          tattooersList: false
+        });
+      }
+    })
+    .catch(function(error) {
+      console.log("gettattooers failed:", error);
+      res.json({ tattooersList: error });
+    });
+});
 
 app.get("/mysessions", function(req, res) {
   res.render("index"), { isUserLog: true };
 });
 
 app.post("/mysessions", function(req, res, next) {
-  let sessionsList = []; 
+  let sessionsList = [];
   const query = sessionModel.find({ artistID: req.fields.artistID });
-  query.exec(function(error, sessions) {
-    if (sessions) {
-          res.json({sessionsList: sessions})
-          } else {
-            res.json({
-              sessionsList: false,
-            });
-          }
-        })
-        .catch(function(error) {
-          console.log("mysession failed:", error);
-          res.json({ sessionsList: error });
+  query
+    .exec(function(error, sessions) {
+      if (sessions) {
+        res.json({ sessionsList: sessions });
+      } else {
+        res.json({
+          sessionsList: false
         });
+      }
+    })
+    .catch(function(error) {
+      console.log("mysession failed:", error);
+      res.json({ sessionsList: error });
+    });
 });
 
 app.get("/addguestsession", function(req, res) {
@@ -209,10 +267,13 @@ app.get("/addguestsession", function(req, res) {
 });
 
 app.post("/addguestsession", function(req, res) {
+  console.log(req.fields.shopCountry);
   let newSession = new sessionModel({
+    artistName: req.fields.artistName,
     artistID: req.fields.artistID,
     tattooShop: req.fields.tattooShop,
     shopAddress: req.fields.shopAddress,
+    shopCountry: req.fields.shopCountry,
     shopCoords: {
       lat: req.fields.shopLat,
       lng: req.fields.shopLng
@@ -233,18 +294,20 @@ app.post("/addguestsession", function(req, res) {
   });
 });
 
-app.delete("/deleteguestsession/:id/:artistID", function(req,res){
-  console.log(req.session.artistID )
- const query = sessionModel.remove({ _id: req.params.id })
- query.exec(function(error, sessionDeleted) {
-  if (sessionDeleted) {
-    const query = sessionModel.find({ artistID: req.params.artistID  });
-    query.exec(function(error, sessionsAfterDelete) {
-      if (sessionsAfterDelete) {
-            res.json({sessionsList: sessionsAfterDelete})
+app.delete("/deleteguestsession/:id/:artistID", function(req, res) {
+  console.log(req.session.artistID);
+  const query = sessionModel.remove({ _id: req.params.id });
+  query
+    .exec(function(error, sessionDeleted) {
+      if (sessionDeleted) {
+        const query = sessionModel.find({ artistID: req.params.artistID });
+        query
+          .exec(function(error, sessionsAfterDelete) {
+            if (sessionsAfterDelete) {
+              res.json({ sessionsList: sessionsAfterDelete });
             } else {
               res.json({
-                sessionsList: false,
+                sessionsList: false
               });
             }
           })
@@ -252,15 +315,14 @@ app.delete("/deleteguestsession/:id/:artistID", function(req,res){
             console.log("mysession failed:", error);
             res.json({ sessionsList: error });
           });
-        } else {
-          res.json({
-            sessionsList: false,
-          });
-        }
-      })
-      .catch(function(error) {
-        console.log("delete session failed:", error);
-        res.json({ sessionsDeleted: error });
-      });
+      } else {
+        res.json({
+          sessionsList: false
+        });
+      }
+    })
+    .catch(function(error) {
+      console.log("delete session failed:", error);
+      res.json({ sessionsDeleted: error });
+    });
 });
-

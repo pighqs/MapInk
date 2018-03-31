@@ -47,8 +47,17 @@ class GuestSessions extends React.Component {
     let artistName = sessionStorage.getItem("name artist logged");
     let redirect;
     if (!sessionStorage.getItem("id artist logged")) {
+      console.log('redirect from guestsessions')
       redirect = <Redirect to="/" />;
     }
+
+    const colors = {
+      grey: '#7d88a1 !important',
+      inactiveGrey: 'rgba(0, 0, 0, 0.25) !important',
+      activeViolet: '#4834d4 !important',
+      hoverViolet: '#686de0 !important'
+    }
+
     const StyledLayout = styled(Layout)`
       min-height: 100vh;
       background: #606c88;
@@ -68,14 +77,27 @@ class GuestSessions extends React.Component {
     border: none;
     margin: 0 auto;
     padding: 10px 25px;
+    height:40px;
     line-height: 0;
     &:hover {
-      color: #4f4db3
+      color: ${colors.hoverViolet}
     }
     `;
 
     const StyledModal = styled(Modal)`
+    position: absolute;
     top: 200px;
+    left: 350px;
+    font-family: "Lato", sans-serif;
+      > div {
+        width: 500px;
+      }
+      .ant-modal-header {
+        text-align: center;
+        .ant-modal-title {
+          letter-spacing: 0.1em;
+          color: ${colors.activeViolet}
+        }
     `
 
     return (
@@ -85,11 +107,11 @@ class GuestSessions extends React.Component {
         <Row type="flex" justify="center">
           <Col xs={24} md={16} align="middle">
             <SubTitle>Welcome, {artistName} !</SubTitle>
-            <ButtonAddSession onClick={this.showModal}>Add a session</ButtonAddSession>
+            <ButtonAddSession onClick={this.showModal}>Add a spot</ButtonAddSession>
             <SessionsList />
             <StyledModal
               bodyStyle={{background : '#4f4db3'}}
-              title="Your new Sessions infos"
+              title="New session infos"
               visible={this.state.modalVisible}
               onCancel={this.handleCancel}
               footer={null}

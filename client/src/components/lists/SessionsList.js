@@ -5,8 +5,7 @@ import styled from "styled-components";
 import { Row, Col, Table, Icon, Popconfirm } from "antd";
 
 import moment from "moment";
-import "moment/locale/fr";
-moment.locale("fr");
+
 
 class SessionsList extends React.Component {
   constructor() {
@@ -66,9 +65,38 @@ class SessionsList extends React.Component {
   }
 
   render() {
+    const colors = {
+      grey: '#7d88a1 !important',
+      inactiveGrey: 'rgba(0, 0, 0, 0.25) !important',
+      activeViolet: '#4834d4 !important',
+      hoverViolet: '#686de0 !important',
+      tranparentWhite: 'rgba(255,255,255, 0.4) !important'
+    };
+
+    const StyledTable = styled(Table)`
+    .ant-table-thead > tr > th {
+      color: ${colors.activeViolet};
+    }
+    .session-row {
+      border-collapse: collapse;
+      > td {
+        border-bottom: 1px solid ${colors.tranparentWhite};
+      }
+      &:hover {
+        color: ${colors.activeViolet};
+        background-color: ${colors.tranparentWhite};
+        > td {
+          background-color: ${colors.tranparentWhite};
+        }
+      } 
+    }
+    `;
+
     const StyledIcon = styled(Icon)`
-    cursor: pointer;
-    `
+      cursor: pointer;
+      font-size: 1.1rem
+    `;
+
     const locale = {
       filterConfirm: "Ok",
       filterReset: "Reset",
@@ -129,10 +157,12 @@ class SessionsList extends React.Component {
       }
     ];
 
+   
+
     return (
       <Row type="flex" justify="center">
       <Col xs={24} md={22}>      
-      <Table
+      <StyledTable
         className='sessionTableList'
         columns={columns}
         rowKey={record => record._id}
@@ -140,6 +170,11 @@ class SessionsList extends React.Component {
         pagination={false}
         locale={locale}
         rowClassName='session-row'
+        onRow={(record) => {
+          return {
+            onClick: () => {this.props.sendCityCoords(record.shopCoords)},       // click row
+          }
+        }}
       />
       </Col>
       </Row>

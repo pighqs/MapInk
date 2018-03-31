@@ -21,8 +21,9 @@ import sendCityCoords from './reducers/sendCityCoords.reducer';
 import sendLoggedArtist from './reducers/sendLoggedArtist.reducer';
 import sendNewSession from './reducers/sendNewSession.reducer';
 import sendActiveLink from './reducers/sendActiveLink.reducer';
+import sendSearchDates from './reducers/sendSearchDates.reducer';
 
-const reducer = combineReducers({ sendCityCoords, sendLoggedArtist, sendNewSession, sendActiveLink });
+const reducer = combineReducers({ sendCityCoords, sendSearchDates, sendLoggedArtist, sendNewSession, sendActiveLink });
 
 const store = createStore(
     reducer, /* preloadedState, */

@@ -47,7 +47,8 @@ class SessionForm extends React.Component {
       startDate: startDate,
       endDate: endDate,
       errorMessage: false,
-      successMessage: false
+      successMessage: false,
+      addressCoords:{}
     });
   }
 
@@ -86,9 +87,17 @@ class SessionForm extends React.Component {
       fetch(geocodeURL)
         .then(response => response.json())
         .then(datas => {
+          let country;
+          let address = datas.results[0].address_components;
+          for (var p = address.length - 1; p >= 0; p--) {
+            if (address[p].types.indexOf("country") !== -1) {
+              country = address[p].short_name;
+            }
+          }
           let cityCoords = {
             lat: datas.results[0].geometry.location.lat,
-            lng: datas.results[0].geometry.location.lng
+            lng: datas.results[0].geometry.location.lng,
+            country: country
           };
           this.setState({
             addressCoords: cityCoords,
@@ -100,6 +109,10 @@ class SessionForm extends React.Component {
           // send form to the back
           let SessionDatas = new FormData();
           SessionDatas.append(
+            "artistName",
+            sessionStorage.getItem("name artist logged")
+          );
+          SessionDatas.append(
             "artistID",
             sessionStorage.getItem("id artist logged")
           );
@@ -107,6 +120,10 @@ class SessionForm extends React.Component {
           SessionDatas.append(
             "shopAddress",
             datas.results[0].formatted_address
+          );
+          SessionDatas.append(
+            "shopCountry",
+            country
           );
           SessionDatas.append(
             "shopLat",
@@ -169,11 +186,11 @@ class SessionForm extends React.Component {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-around",
-        height: "200px"
+        height: "250px"
       },
       icon: {
         color: "#606c88"
-      },
+      }
       // je dois garder styles dans css .ant-input
       // input: {
       //   borderRadius: "50px !important",

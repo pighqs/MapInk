@@ -4,12 +4,16 @@ import styled from "styled-components";
 import Map from "../map/Map";
 import SearchForm from "../forms/SearchForm";
 import Navbar from "../header/Navbar";
+import SearchResultsList from '../lists/SearchResultsList';
+
 
 // antd
 import { Layout } from "antd";
 import { Row, Col } from "antd";
 
 class SearchResults extends React.Component {
+
+
   render() {
     const StyledLayout = styled(Layout)`
       min-height: 100vh;
@@ -24,17 +28,17 @@ class SearchResults extends React.Component {
       font-family: "Lato", "Monospaced Number";
       font-style: italic;
     `;
+
     return (
       <StyledLayout>
         <Navbar />
         <Row type="flex" justify="center">
-          <Col span={14} align="middle">
-            <Row type="flex" justify="center">
-              <SubTitle className="white">These are the tattooers available</SubTitle>
+          <Col span={16} align="middle">
+              <SubTitle>These are the tattooers available</SubTitle>
               <SearchForm />
-            </Row>
+              <SearchResultsList/>
           </Col>
-          <Col span={10} align="middle">
+          <Col span={8} align="middle">
             <Map />
           </Col>
         </Row>

@@ -55,24 +55,15 @@ class Login extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 }
-      },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 18 }
+        xs: { span: 24 }
       }
     };
     const tailFormItemLayout = {
       wrapperCol: {
         xs: {
-          span: 24,
-          offset: 0
-        },
-        sm: {
-          span: 18,
-          offset: 0
+          span: 10,
+          offset: 9
         }
       }
     };
@@ -95,7 +86,7 @@ class Login extends React.Component {
    
    
     return (
-      <div >
+      <div>
         <Form 
         layout='vertical'
         onSubmit={this.handleSubmit}>

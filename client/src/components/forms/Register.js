@@ -88,28 +88,20 @@ class Register extends React.Component {
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 }
-      },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 18 }
+        xs: { span: 24 }
       }
     };
 
     const tailFormItemLayout = {
       wrapperCol: {
         xs: {
-          span: 24,
-          offset: 0
-        },
-        sm: {
-          span: 18,
-          offset: 8
-        }
+          span: 10,
+          offset: 9
+        
       }
-    };
+    }
+  };
 
     const RoundButton = styled(Button)`
       border-radius: 20px
@@ -121,6 +113,7 @@ class Register extends React.Component {
         color: #4f4db3
       }
     `;
+
 
 
 

@@ -1,15 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
 import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  Marker,
+  Marker
 } from "react-google-maps";
 
-import { Spin, Icon } from 'antd';
-
+import { Spin, Icon, Tooltip } from "antd";
 
 class Map extends React.Component {
   constructor() {
@@ -18,40 +18,41 @@ class Map extends React.Component {
       center: {
         lat: null,
         lng: null
-      }
+      },
+      spinActive: false
     };
-  }
-  
-  componentDidMount() {
-    if(this.state.center.lat == null) {
-      navigator.geolocation.getCurrentPosition(position => {
-        console.log("position",position)
-        this.setState({
-          center: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          }
-        });
-        sessionStorage.setItem("user position", this.state.center);
-      });
-    } else {
-      console.log("deja des coordonnes")
-    }
+    this.geolocate = this.geolocate.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     //nouvelles props reçues via mapStateToProps
-    console.log(
-      "Map reçoit nextProps: ",
-      nextProps.newCoords
-    );
+    console.log("Map reçoit nextProps: ", nextProps.newCoords);
     this.setState({
-      center: nextProps.newCoords
+      center: {
+        lat: Number(nextProps.newCoords.lat),
+        lng: Number(nextProps.newCoords.lng)
+      }
     });
   }
 
-
-
+  geolocate() {
+    this.setState({
+      spinActive: true
+    });
+    navigator.geolocation.getCurrentPosition(position => {
+      this.setState({
+        center: {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        }
+      });
+      sessionStorage.setItem("user position lat", this.state.center.lat);
+      sessionStorage.setItem("user position lng", this.state.center.lng);
+      this.setState({
+        spinActive: false
+      });
+    });
+  }
 
   handleMarkerClick() {
     //console.log(`coucou`);
@@ -64,40 +65,65 @@ class Map extends React.Component {
           <Marker position={this.state.center} onClick={props.onMarkerClick} />
         </GoogleMap>
       ))
-    )
-    const styles = {
-      spinContainer: {
-        height:'100vh',
-        backgroundColor: '#e7ecf7'
-      },
-      spin: {
-        lineHeight:'90vh',
-        color:'#4834d4',
-        fontSize: '64px'
-      }
-    }
+    );
+
+    const StyledDiv = styled.div`
+      height: 100vh;
+      background-color: #b1b9d1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    `;
+
+    const StyledSpin = styled(Spin)`
+    color: white;
+    font-size: 60px;
+    `;
+
+    const StyledTooltip = styled(Tooltip)`
+    background-color: #4834d4;
+    color: red
+    `;
+
+    const StyledGeolocateIcon = styled(Icon)`
+        color: white;
+        font-size: 64px;
+        cursor: pointer
+      },`
+      
     const spinIcon = <Icon type="loading" spin />;
 
-    if(!this.state.center.lat) {
+    if (!this.state.center.lat) {
       return (
-        <div style={styles.spinContainer}>
-          <Spin indicator={spinIcon} style={styles.spin}/>
-        </div>
+        <StyledDiv>
+          {!this.state.spinActive && (
+            <StyledTooltip
+              arrowPointAtCenter
+              title="find my position"
+            >
+              <StyledGeolocateIcon
+                type="environment-o"
+                onClick={this.geolocate}
+              />
+            </StyledTooltip>
+          )}
+          {this.state.spinActive && (
+            <StyledSpin indicator={spinIcon} />
+          )}
+        </StyledDiv>
       );
-
     } else {
       return (
         <MapWithAMarker
           isMarkerShown
           googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyDH5y_hZ25iSR87OMKrt9TFLH1IuO1ULrE"
-          loadingElement={<div style={{ height: `100vh`}} />}
+          loadingElement={<div style={{ height: `100vh` }} />}
           containerElement={<div style={{ height: `100vh`, width: `100%` }} />}
-          mapElement={<div style={{ height: `100vh`}} />}
+          mapElement={<div style={{ height: `100vh` }} />}
           onMarkerClick={this.handleMarkerClick}
         />
       );
     }
-
   }
 }
 

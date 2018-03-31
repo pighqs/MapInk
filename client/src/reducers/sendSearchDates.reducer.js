@@ -1,12 +1,12 @@
 // reducer appelé par fonction sendCityCoords(cityCoords) dans component SearchForm
 // il renvoie state.cityCoords en mapStateToProps
 
-const sendCityCoords = (state = {cityCoords:{}}, action) => {
-    if (action.type === "NEW_CITY_COORDS") {
-      return action.cityCoords;
+const sendSearchDates = (state = {searchDates:{}}, action) => {
+    if (action.type === "NEW_SEARCH_DATES") {
+      return action.searchDates;
     } else {
       return state;
     }
   }
   
-  export default sendCityCoords;
+  export default sendSearchDates;
