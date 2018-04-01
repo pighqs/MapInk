@@ -8,20 +8,41 @@ import Navbar from "../header/Navbar";
 
 // antd
 import { Layout, Row, Col } from "antd";
-import { Card, Icon, Avatar } from 'antd';
+import { Card, Icon, Popconfirm, message  } from 'antd';
 const { Meta } = Card;
 
 class Profile extends React.Component {
   constructor(props) {
     super(props);
-    this.handleLogout = this.handleLogout.bind(this);
+    this.handleEditProfile = this.handleEditProfile.bind(this);
+    this.handleDeleteProfile = this.handleDeleteProfile.bind(this);
+    this.cancelDeleteProfile = this.cancelDeleteProfile.bind(this);   
   }
 
-  handleLogout() {
-    sessionStorage.clear();
-    this.setState({
-      logStatus: false
-    });
+  handleEditProfile() {
+  console.log('edit profile')
+  }
+
+  handleDeleteProfile(e) {
+    console.log(e);
+    fetch(`deleteprofile/${this.props.artist._id}`, {
+      method: "DELETE"
+    })
+      .then(response => response.json())
+      .then(result => {
+        this.props.sendLoggedArtist(false)
+        message.success('Profile deleted');
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  
+  }
+
+  
+  cancelDeleteProfile(e) {
+    console.log(e);
+    message.error('Cancel');
   }
 
   render() {
@@ -43,6 +64,7 @@ class Profile extends React.Component {
     if (!this.props.artist._id) {
       redirect = <Redirect to="/" />;
     }
+    let website = <a href={this.props.artist.website}>{this.props.artist.website}</a>
 
     return (
       <StyledLayout>
@@ -51,25 +73,23 @@ class Profile extends React.Component {
           <Col span={24} align="middle">
             <SubTitle>Profile</SubTitle>
             <Card
-              style={{ width: 300 }}
+              style={{ width: 500 }}
               cover={
                 <img
                   alt="example"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                  src="https://placeimg.com/500/400/people"
                 />
               }
               actions={[
-                <Icon type="setting" />,
-                <Icon type="edit" />,
-                <Icon type="ellipsis" />
+                <Popconfirm placement='left' title="Do you want to delete your profile?" onConfirm={this.handleDeleteProfile} onCancel={this.cancelDeleteProfile} okText="Yes, delete my Profile" cancelText="Cancel">
+                  <p ><Icon type="setting" /> delete profile</p>
+                </Popconfirm>,
+                <p onClick={this.handleEditProfile}><Icon type="edit" /> edit profile</p>,
               ]}
             >
               <Meta
-                avatar={
-                  <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                }
-                title="Card title"
-                description="This is the description"
+                title={this.props.artist.name}
+                description={website}
               />
             </Card>
           </Col>
@@ -83,8 +103,8 @@ class Profile extends React.Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    sendCityCoords: value => {
-      dispatch({ type: "NEW_CITY_COORDS", cityCoords: value });
+    sendLoggedArtist: function(value) {
+      dispatch({ type: "ARTIST_IS_LOG", artist: value });
     }
   };
 };

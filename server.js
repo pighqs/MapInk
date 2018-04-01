@@ -93,10 +93,6 @@ app.get("/savesession", function(req, res) {
   res.render("index"), { isUserLog: undefined };
 });
 
-app.get("/registerlogin", function(req, res) {
-  res.render("index");
-});
-
 app.get("/register", function(req, res) {
   res.render("index"), { isUserLog: undefined };
 });
@@ -144,6 +140,23 @@ app.post("/register", function(req, res) {
       }
     }
   );
+});
+
+app.delete("/deleteprofile/:id", function(req, res) {
+  console.log(req)
+  const query = ArtistModel.remove({ _id: req.params.id });
+  query
+    .exec(function(error, profileDeleted) {
+      if (profileDeleted) {
+        res.json({ profileDeleted: true });
+      }
+    })
+    .catch(function(error) {
+      console.log("delete profile failed:", error);
+      res.json({
+        profileDeleted: false
+      });
+    });
 });
 
 app.get("/login", function(req, res) {
@@ -316,7 +329,6 @@ app.post("/addguestsession", function(req, res) {
 });
 
 app.delete("/deleteguestsession/:id/:artistID", function(req, res) {
-  console.log(req.session.artistID);
   const query = sessionModel.remove({ _id: req.params.id });
   query
     .exec(function(error, sessionDeleted) {

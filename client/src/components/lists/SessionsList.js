@@ -14,7 +14,7 @@ class SessionsList extends React.Component {
       sessionsListFromBack: [],
       sessionsSinceLog: []
     };
-    this.handleDelete = this.handleDelete.bind(this);
+    this.handleDeleteSession = this.handleDeleteSession.bind(this);
   }
 
   componentWillMount() {
@@ -47,7 +47,7 @@ class SessionsList extends React.Component {
     });
   }
 
-  handleDelete(id, artistID) {
+  handleDeleteSession(id, artistID) {
     fetch(`deleteguestsession/${id}/${artistID}`, {
       method: "DELETE"
     })
@@ -148,7 +148,7 @@ class SessionsList extends React.Component {
         render: (text, record) => (
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => this.handleDelete(record._id, record.artistID)}
+              onConfirm={() => this.handleDeleteSession(record._id, record.artistID)}
             >
               <StyledIcon type="delete" />
             </Popconfirm>
