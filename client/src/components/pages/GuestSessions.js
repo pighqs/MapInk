@@ -19,13 +19,14 @@ class GuestSessions extends React.Component {
         lat: null,
         lng: null
       },
-      modalVisible: false
+      modalVisible: false,
     };
     this.showModal = this.showModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
 
   }
-
+componentWillMount() {
+}
   showModal = () => {
     this.setState({
       modalVisible: true
@@ -44,13 +45,7 @@ class GuestSessions extends React.Component {
   }
 
   render() {
-    let artistName = sessionStorage.getItem("name artist logged");
-    let redirect;
-    if (!sessionStorage.getItem("id artist logged")) {
-      console.log('redirect from guestsessions')
-      redirect = <Redirect to="/" />;
-    }
-
+    
     const colors = {
       grey: '#7d88a1 !important',
       inactiveGrey: 'rgba(0, 0, 0, 0.25) !important',
@@ -100,13 +95,20 @@ class GuestSessions extends React.Component {
         }
     `
 
+    let redirect;
+    if (!this.props.artist._id) {
+      console.log("redirect from guestsessions");
+      redirect = <Redirect to="/" />;
+    }
+
+
     return (
       <StyledLayout>
         <Navbar />
         {redirect}
         <Row type="flex" justify="center">
           <Col xs={24} md={16} align="middle">
-            <SubTitle>Welcome, {artistName} !</SubTitle>
+            <SubTitle>Welcome, {this.props.artist.name} !</SubTitle>
             <ButtonAddSession onClick={this.showModal}>Add a spot</ButtonAddSession>
             <SessionsList />
             <StyledModal
@@ -140,7 +142,7 @@ const mapDispatchToProps = (dispatch, props) => {
 const mapStateToProps = state => {
   // state.sendCityCoords reçu via sendCityCoords.reducer devient props.newCity
   return {
-    artistID: state.sendLoggedArtist,
+    artist: state.sendLoggedArtist,
     newSession: state.sendNewSession,
   };
 };

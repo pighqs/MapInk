@@ -17,28 +17,10 @@ class SearchResultsList extends React.Component {
   }
  
   componentWillReceiveProps(nextProps) {
-    let searchDatas = new FormData();
-    //searchDatas.append("startDate", nextProps.searchDates.startDate)
-    //searchDatas.append("endDate", nextProps.searchDates.endDate)
-    searchDatas.append("searchPlace_lat", nextProps.searchPlace.lat)
-    searchDatas.append("searchPlace_lng", nextProps.searchPlace.lng)
-    searchDatas.append("searchPlace_country", nextProps.searchPlace.country)
-
-    fetch("/gettattooers", {
-      method: "POST",
-      body: searchDatas
+    console.log(nextProps.searchResults);
+    this.setState({
+      resultsList: nextProps.searchResults
     })
-      .then(response => {
-        return response.json();
-      })
-      .then(results => {
-        this.setState({
-          resultsList: results.tattooersList
-        });
-      })
-      .catch(error => {
-        console.log("Request failed", error);
-      });
   }
 
   // arrow function to bind this
@@ -121,8 +103,8 @@ const mapStateToProps = state => {
   return {
     artistID: state.sendLoggedArtist,
     newSession: state.sendNewSession,
-    searchDates: state.sendSearchDates,
-    searchPlace: state.sendCityCoords
+    searchPlace: state.sendCityCoords,
+    searchResults: state.sendSearchResults
   };
 };
 

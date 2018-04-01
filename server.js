@@ -75,6 +75,10 @@ const sessionSchema = mongoose.Schema({
 const ArtistModel = mongoose.model("artists", tattooArtistSchema);
 const sessionModel = mongoose.model("sessions", sessionSchema);
 
+// MOMENT
+var moment = require("moment");
+moment().format();
+
 ///////////////    ROUTES     /////////////
 
 app.get("/", function(req, res) {
@@ -124,6 +128,7 @@ app.post("/register", function(req, res) {
               req.session.artistName = artist.name;
 
               res.json({
+                artist: artist,
                 testRegister: req.session.artistID,
                 artistName: req.session.artistName,
                 errRegister: false
@@ -157,6 +162,7 @@ app.post("/login", function(req, res) {
             req.session.artistName = artist.name;
             res.json({
               testLogin: req.session.artistID,
+              artist: artist,
               artistName: req.session.artistName,
               errLogin: false
             });
@@ -197,6 +203,10 @@ app.post("/gettattooers", function(req, res) {
       if (tattooersSpots) {
         const searchLat = req.fields.searchPlace_lat;
         const searchLng = req.fields.searchPlace_lng;
+        const searchStartDate = req.fields.searchStartDate;
+        const searchEndDate = req.fields.searchEndDate;
+        //console.log(searchStartDate, searchEndDate)
+        // calcul distance entre recherche et spot :
         tattooersSpots.forEach((tattooerSpot, index) => {
           let spotLat = tattooerSpot.shopCoords.lat;
           let spotLng = tattooerSpot.shopCoords.lng;
@@ -217,15 +227,27 @@ app.post("/gettattooers", function(req, res) {
             if (unit == "N") {
               dist = dist * 0.8684;
             }
-            return "distance", dist;
+            return dist;
           };
-          if (distance(searchLat, searchLng, spotLat, spotLng, "K") < 80) {
-            tattooersList.push(tattooerSpot);
-          } else {
-            console.log("too far");
-          }
-        });
+          let spotStartDate = moment(tattooerSpot.startDate, "DD MMM YY");
+          let spotEndDate = moment(tattooerSpot.endDate, "DD MMM YY");
 
+          const dayMatch =
+            moment(searchStartDate).isBetween(spotStartDate, spotEndDate) ||
+            moment(searchEndDate).isBetween(spotStartDate, spotEndDate) ||
+            moment(spotStartDate).isBetween(searchStartDate, searchEndDate) ||
+            moment(spotEndDate).isBetween(searchStartDate, searchEndDate);
+
+          if (
+            distance(searchLat, searchLng, spotLat, spotLng, "K") < 80 &&
+            dayMatch
+          ) {
+            tattooersList.push(tattooerSpot);
+          }
+          // else {
+          //   console.log("too far");
+          // }
+        });
         res.json({ tattooersList });
       } else {
         res.json({
@@ -267,7 +289,6 @@ app.get("/addguestsession", function(req, res) {
 });
 
 app.post("/addguestsession", function(req, res) {
-  console.log(req.fields.shopCountry);
   let newSession = new sessionModel({
     artistName: req.fields.artistName,
     artistID: req.fields.artistID,

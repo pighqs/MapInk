@@ -40,12 +40,8 @@ class Register extends React.Component {
         })
           .then(response => response.json())
           .then(answerRegistration => {
-            //console.log("testRegister", answerRegistration.testRegister);
-            //console.log("errRegister", answerRegistration.errRegister);
-            if (answerRegistration.testRegister) {
-              sessionStorage.setItem("id artist logged", answerRegistration.testRegister);
-              sessionStorage.setItem("name artist logged", answerRegistration.artistName);
-              this.props.sendLoggedArtist(answerRegistration.testRegister);
+            if (answerRegistration.artist) {
+              this.props.sendLoggedArtist(answerRegistration.artist);
               this.setState({ registerMessage: false });
               message.success("your account has been saved");
 
@@ -238,7 +234,7 @@ const RegisterForm = Form.create()(Register);
 const mapDispatchToProps = (dispatch, props) => {
   return {
     sendLoggedArtist: function(value) {
-      dispatch({ type: "ARTIST_IS_LOG", artistID: value });
+      dispatch({ type: "ARTIST_IS_LOG", artist: value });
     }
   };
 };
@@ -246,7 +242,7 @@ const mapDispatchToProps = (dispatch, props) => {
 const mapStateToProps = state => {
   // state.sendCityCoords reçu via sendCityCoords.reducer devient props.newCity
   return {
-    artistID: state.sendLoggedArtist
+    artist: state.sendLoggedArtist
   };
 };
 

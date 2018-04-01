@@ -38,11 +38,9 @@ class SessionForm extends React.Component {
   }
 
   handleDate(date) {
-    let startDate = moment(date[0]);
-    let endDate = moment(date[1]);
-    console.log("startDate", startDate);
-    console.log(startDate.isBetween("2018-02-01", "2018-02-25"));
-    console.log(endDate.isBetween("2018-02-01", "2018-02-25"));
+    let startDate = moment(date[0], "YYYY MM DD");
+    let endDate = moment(date[1], "YYYY MM DD");
+
     this.setState({
       startDate: startDate,
       endDate: endDate,
@@ -256,7 +254,7 @@ const mapDispatchToProps = (dispatch, props) => {
 const mapStateToProps = state => {
   // state.sendCityCoords reçu via sendCityCoords.reducer devient props.newCity
   return {
-    artistID: state.sendLoggedArtist
+    artist: state.sendLoggedArtist
   };
 };
 

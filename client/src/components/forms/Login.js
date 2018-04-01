@@ -32,13 +32,13 @@ class Login extends React.Component {
         })
           .then(response => response.json())
           .then(answerLogin => {
-            if (answerLogin.testLogin) {
-              sessionStorage.setItem("id artist logged", answerLogin.testLogin);
-              sessionStorage.setItem(
-                "name artist logged",
-                answerLogin.artistName
-              );
-              this.props.sendLoggedArtist(answerLogin.testLogin);
+            if (answerLogin.artist) {
+              // sessionStorage.setItem("id artist logged", answerLogin.testLogin);
+              // sessionStorage.setItem(
+              //   "name artist logged",
+              //   answerLogin.artist.name
+              // );
+              this.props.sendLoggedArtist(answerLogin.artist)
               this.setState({ logMessage: false }); // redirection
             } else {
               this.setState({ logMessage: answerLogin.errLogin });
@@ -146,7 +146,7 @@ const LoginForm = Form.create()(Login);
 const mapDispatchToProps = (dispatch, props) => {
   return {
     sendLoggedArtist: function(value) {
-      dispatch({ type: "ARTIST_IS_LOG", artistID: value });
+      dispatch({ type: "ARTIST_IS_LOG", artist: value });
     }
   };
 };
@@ -154,7 +154,7 @@ const mapDispatchToProps = (dispatch, props) => {
 const mapStateToProps = state => {
   // state.sendCityCoords reçu via sendCityCoords.reducer devient props.newCity
   return {
-    artistID: state.sendLoggedArtist
+    artist: state.sendLoggedArtist
   };
 };
 

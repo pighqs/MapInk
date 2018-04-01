@@ -17,24 +17,24 @@ class Navbar extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
 
     this.state = {
-      artistID: false,
+      artistLogged: false,
       modalVisible: false,
       linkClicked: ""
     };
   }
 
   handleClick(e) {
-    sessionStorage.removeItem('search address');
-    sessionStorage.removeItem('start date');
-    sessionStorage.removeItem('end date');
+    sessionStorage.removeItem("search address");
+    sessionStorage.removeItem("start date");
+    sessionStorage.removeItem("end date");
     sessionStorage.removeItem("user position name");
- 
+
     switch (e.key) {
       case "logout":
-        this.props.sendLoggedArtist(false);
-        sessionStorage.clear();
+      sessionStorage.clear();
+      this.props.sendLoggedArtist(false);
         this.setState({
-          artistID: false
+          artistLogged: false
         });
         break;
       case "register":
@@ -64,7 +64,7 @@ class Navbar extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.sendLoggedArtist) {
       this.setState({
-        artistID: nextProps.sendLoggedArtist,
+        artistLogged: nextProps.artist,
         modalVisible: false
       });
     }
@@ -90,6 +90,8 @@ class Navbar extends React.Component {
     `;
 
     const StyledMenu = styled(Menu)`
+      display:flex;
+      justify-content: flex-end;
       .ant-menu-item > i {
         color: ${colors.grey}
       }
@@ -114,13 +116,14 @@ class Navbar extends React.Component {
         }
       }
       .ant-menu-submenu {
-        color: ${colors.grey}
+        color: ${colors.grey};
         display: inline !important;
         border-bottom: 3px solid ${colors.grey}
         &:hover {
           border-bottom: 3px solid ${colors.hoverViolet};
           color: ${colors.hoverViolet};
           > .ant-menu-submenu-title {
+            cursor: default;
             color: ${colors.hoverViolet};
           }
         }
@@ -153,13 +156,18 @@ class Navbar extends React.Component {
       &:hover {
         color: ${colors.hoverViolet};
         border-bottom: none !important;
-      }
+      }import SessionItem from '../lists/SessionItem';
+
     `;
+
+    const StyledNavbarIcon = styled(Icon)`
+    font-size: 1rem;
+    `
 
     const StyledModal = styled(Modal)`
       position: absolute;
       top: 49px;
-      left: 0px;
+      right: 0px;
       font-family: "Lato", sans-serif;
       > div {
         width: 400px;
@@ -173,28 +181,38 @@ class Navbar extends React.Component {
       }
     `;
 
-    let logOutItem, logItem, sessionsIsDisabled;
-    if (sessionStorage.getItem("id artist logged")) {
-      logOutItem = (
-        <Menu.Item key="logout">
-          <Icon type="logout" /> logout
+    let logOutItem, logItem, profileItem, sessionsItem;
+    if (this.props.artist._id) {
+      profileItem = (
+        <Menu.Item key="profile">
+        <StyledNavbarIcon type="user" /> 
+         <Link to="/profile">your profile</Link>
         </Menu.Item>
       );
-      sessionsIsDisabled = false;
+      sessionsItem = (
+        <Menu.Item key="guestsessions">
+        <StyledNavbarIcon type="calendar" />
+        <Link to="/guestsessions">your guest spots</Link>
+      </Menu.Item>
+      )
+      logOutItem = (
+        <Menu.Item key="logout">
+          <StyledNavbarIcon type="logout" /> logout
+        </Menu.Item>
+      );
     } else {
       logItem = (
         <SubMenu
           title={
             <span>
-              <Icon type="login" />Artist Access
+              <StyledNavbarIcon type="login" />Artist Access
             </span>
           }
         >
-          <StyledDropItem key="register">register</StyledDropItem>
-          <StyledDropItem key="login">Login</StyledDropItem>
+          <StyledDropItem key="login"><Icon type="user" />Login</StyledDropItem>
+          <StyledDropItem key="register"><Icon type="user-add" />register</StyledDropItem>
         </SubMenu>
       );
-      sessionsIsDisabled = true;
     }
 
     // afficher formulaire correspondant au lien cliqué ds modal:
@@ -218,15 +236,13 @@ class Navbar extends React.Component {
           mode="horizontal"
         >
           <Menu.Item key="home">
-            <Icon type="home" />
+            <StyledNavbarIcon type="home" />
             <Link to="/">Home</Link>
           </Menu.Item>
+          {profileItem}
+          {sessionsItem}
           {logOutItem}
           {logItem}
-          <Menu.Item disabled={sessionsIsDisabled} key="guestsessions">
-            <Icon type="calendar" />
-            <Link to="/guestsessions">your guest spots</Link>
-          </Menu.Item>
         </StyledMenu>
         <StyledModal
           bodyStyle={{ background: "#4f4db3" }}
@@ -243,14 +259,10 @@ class Navbar extends React.Component {
   }
 }
 
-//send artistID to the reducer
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    sendCityCoords: function(value) {
-      dispatch({ type: "NEW_CITY_COORDS", cityCoords: value });
-    },
     sendLoggedArtist: function(value) {
-      dispatch({ type: "ARTIST_IS_LOG", artistID: value });
+      dispatch({ type: "ARTIST_IS_LOG", artist: value });
     },
     sendActiveLink: function(value) {
       dispatch({ type: "ACTIVE_LINK", activeLink: value });
@@ -261,7 +273,7 @@ const mapDispatchToProps = (dispatch, props) => {
 const mapStateToProps = state => {
   // state.sendCityCoords reçu via sendCityCoords.reducer devient props.newCity
   return {
-    artistID: state.sendLoggedArtist,
+    artist: state.sendLoggedArtist,
     activeLink: state.sendActiveLink
   };
 };

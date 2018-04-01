@@ -20,8 +20,7 @@ class SessionsList extends React.Component {
   componentWillMount() {
     let mySessionsData = new FormData();
     mySessionsData.append(
-      "artistID",
-      sessionStorage.getItem("id artist logged")
+      "artistID",this.props.artist._id
     );
 
     fetch("/mysessions", {
@@ -197,7 +196,7 @@ const mapDispatchToProps = (dispatch, props) => {
 const mapStateToProps = state => {
   // state.sendCityCoords reçu via sendCityCoords.reducer devient props.newCity
   return {
-    artistID: state.sendLoggedArtist,
+    artist: state.sendLoggedArtist,
     newSession: state.sendNewSession,
   };
 };

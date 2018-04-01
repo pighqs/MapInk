@@ -17,8 +17,8 @@ class SearchForm extends React.Component {
     super(props);
     this.state = {
       place: null,
-      startDate: "",
-      endDate: "",
+      startDate: null,
+      endDate: null,
       geoLocateplace: {}
     };
     this.handleSearch = this.handleSearch.bind(this);
@@ -62,19 +62,10 @@ class SearchForm extends React.Component {
     let startDate = moment(date[0], "YYYY MM DD");
     let endDate = moment(date[1], "YYYY MM DD");
 
-    console.log(startDate.isBetween("2018-02-01", "2018-02-25"));
-    console.log(endDate.isBetween("2018-02-01", "2018-02-25"));
     this.setState({
       startDate: startDate,
       endDate: endDate
     });
-    let searchDates = {
-      startDate: startDate,
-      endDate: endDate
-    };
-    this.props.sendSearchDates(searchDates);
-    sessionStorage.setItem("start date", date[0]);
-    sessionStorage.setItem("end date", date[1]);
   }
 
   handleSearch(searchValue) {
@@ -97,7 +88,7 @@ class SearchForm extends React.Component {
         let address = datas.results[0].address_components;
         for (var p = address.length - 1; p >= 0; p--) {
           if (address[p].types.indexOf("country") !== -1) {
-            country = address[p].short_name
+            country = address[p].short_name;
           }
         }
 
@@ -111,6 +102,33 @@ class SearchForm extends React.Component {
         });
         // send coords to the reducer :
         this.props.sendCityCoords(cityCoords);
+        console.log(moment(this.state.startDate).format() === "Invalid date");
+        let searchDatas = new FormData();
+        if (!this.state.startDate || !this.state.startDate) {
+          searchDatas.append("searchStartDate",moment().format());
+          searchDatas.append("searchEndDate",moment().add(1, 'months').format());
+        } else {
+          searchDatas.append("searchStartDate",moment(this.state.startDate).format());
+          searchDatas.append("searchEndDate",moment(this.state.endDate).format());
+        }
+          searchDatas.append("searchPlace_lat", cityCoords.lat);
+          searchDatas.append("searchPlace_lng", cityCoords.lng);
+          searchDatas.append("searchPlace_country", country);
+
+          fetch("/gettattooers", {
+            method: "POST",
+            body: searchDatas
+          })
+            .then(response => {
+              return response.json();
+            })
+            .then(searchResults => {
+              this.props.sendSearchResults(searchResults.tattooersList);
+            })
+            .catch(error => {
+              console.log("Request failed", error);
+            });
+        
       })
 
       .catch(error => console.log("erreur fetch geocode !!!", error));
@@ -190,8 +208,8 @@ const mapDispatchToProps = (dispatch, props) => {
     sendCityCoords: function(value) {
       dispatch({ type: "NEW_CITY_COORDS", cityCoords: value });
     },
-    sendSearchDates: function(value) {
-      dispatch({ type: "NEW_SEARCH_DATES", searchDates: value });
+    sendSearchResults: function(value) {
+      dispatch({ type: "NEW_SEARCH_RESULTS", searchResults: value });
     }
   };
 };
