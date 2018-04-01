@@ -33,11 +33,6 @@ class Login extends React.Component {
           .then(response => response.json())
           .then(answerLogin => {
             if (answerLogin.artist) {
-              // sessionStorage.setItem("id artist logged", answerLogin.testLogin);
-              // sessionStorage.setItem(
-              //   "name artist logged",
-              //   answerLogin.artist.name
-              // );
               this.props.sendLoggedArtist(answerLogin.artist)
               this.setState({ logMessage: false }); // redirection
             } else {
