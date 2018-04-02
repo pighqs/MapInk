@@ -8,19 +8,44 @@ import Navbar from "../header/Navbar";
 
 // antd
 import { Layout, Row, Col } from "antd";
-import { Card, Icon, Popconfirm, message  } from 'antd';
+import { Card, Icon, Popconfirm, Upload, message  } from 'antd';
 const { Meta } = Card;
+const { Dragger }= Upload;
 
 class Profile extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      name: this.props.artist.name,
+      mail: this.props.artist.mail,
+      website: this.props.artist.website,
+      pic: this.props.artist.pic
+    };
     this.handleEditProfile = this.handleEditProfile.bind(this);
     this.handleDeleteProfile = this.handleDeleteProfile.bind(this);
     this.cancelDeleteProfile = this.cancelDeleteProfile.bind(this);   
   }
 
   handleEditProfile() {
-  console.log('edit profile')
+  console.log('this.state.mail', this.state.mail)
+//   let updateDatas = new FormData();
+//       updateDatas.append("newMail", values.emailLogin);
+//       updateDatas.append("newPassword", values.passwordLogin);
+//       updateDatas.append("newArtistName", values.passwordLogin);
+//       updateDatas.append("newWebsite", values.passwordLogin);
+//       updateDatas.append("newPic", values.passwordLogin);
+//   fetch(`/updateprofile/${this.props.artist._id}`, {
+//   method: 'PUT',
+//   body: updateDatas
+// }).then(function(response) {
+//     return response.json();
+// })
+// .then(function(data) {
+//     console.log(data);
+// }).catch(function(error) {
+//     console.log('Request failed', error)
+// });
+
   }
 
   handleDeleteProfile(e) {
@@ -59,12 +84,41 @@ class Profile extends React.Component {
       font-family: "Lato", "Monospaced Number";
       font-style: italic;
     `;
+    const NoProfilePic = styled.div`
+    width:500px;
+    height: 400px;
+    background-Color: #ddd;
+    color: white;
+    line-Height:400px;
+    font-size: 1.2rem;
+    font-family: "Lato", "Monospaced Number";
+    font-style: italic;
+  `;
 
     let redirect;
     if (!this.props.artist._id) {
       redirect = <Redirect to="/" />;
     }
-    let website = <a href={this.props.artist.website}>{this.props.artist.website}</a>
+    let website = <a href={this.state.website}>{this.state.website}</a>
+
+    const props = {
+      name: 'file',
+      multiple: true,
+      action: '//jsonplaceholder.typicode.com/posts/',
+      onChange(info) {
+        const status = info.file.status;
+        if (status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (status === 'done') {
+          message.success(`${info.file.name} file uploaded successfully.`);
+        } else if (status === 'error') {
+          message.error(`${info.file.name} file upload failed.`);
+        }
+      },
+    };
+
+    let profilePic = this.state.pic || <NoProfilePic> No Profile Picture </NoProfilePic>
 
     return (
       <StyledLayout>
@@ -74,21 +128,16 @@ class Profile extends React.Component {
             <SubTitle>Profile</SubTitle>
             <Card
               style={{ width: 500 }}
-              cover={
-                <img
-                  alt="example"
-                  src="https://placeimg.com/500/400/people"
-                />
-              }
+              cover={profilePic}
               actions={[
                 <Popconfirm placement='left' title="Do you want to delete your profile?" onConfirm={this.handleDeleteProfile} onCancel={this.cancelDeleteProfile} okText="Yes, delete my Profile" cancelText="Cancel">
                   <p ><Icon type="setting" /> delete profile</p>
                 </Popconfirm>,
-                <p onClick={this.handleEditProfile}><Icon type="edit" /> edit profile</p>,
+                <p onClick={this.handleEditProfile}><Icon type="user-delete" /> edit profile</p>,
               ]}
             >
               <Meta
-                title={this.props.artist.name}
+                title={this.state.name}
                 description={website}
               />
             </Card>

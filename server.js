@@ -143,7 +143,6 @@ app.post("/register", function(req, res) {
 });
 
 app.delete("/deleteprofile/:id", function(req, res) {
-  console.log(req)
   const query = ArtistModel.remove({ _id: req.params.id });
   query
     .exec(function(error, profileDeleted) {
@@ -158,6 +157,13 @@ app.delete("/deleteprofile/:id", function(req, res) {
       });
     });
 });
+
+// app.update("/updateprofile/:id", function(req, res){
+//   // ArtistModel.findByIdAndUpdate(req.params.id, { $set: { size: 'large' }}, { new: true }, function (err, updateProfile {
+//   //   if (err) return handleError(err);
+//   //   res.send(updateProfile);
+//   });
+
 
 app.get("/login", function(req, res) {
   res.render("index", { isUserLog: undefined });
